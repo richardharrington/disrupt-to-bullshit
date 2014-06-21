@@ -1,0 +1,14 @@
+{
+    "manifest_version": 2,
+    "name": "Disrupt to Bullshit",
+    "version": "1.0",
+    "description": "Replaces various versions of 'disrupt' with 'bullshit'.",
+    "content_scripts":
+    [
+        {
+            "matches": ["*://*/*"],
+            "js": ["content_script.js"],
+            "run_at": "document_end"
+        }
+    ]
+}
