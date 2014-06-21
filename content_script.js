@@ -29,18 +29,22 @@ var lowerCasePhrasePairs = [
     [ 'disrupt', 'rain bullshit on' ],
 ];
 
-// ---------------------------------------------
-
 var maxInnovationSmellRatio = 0.005; // More than 0.5% of nodes must contain at least one innovation-related word
 
-var substitutions = generateSubstitutions();
-
-var innovationSmellRatio = nodeRatio(document.body, isInnovationRelated);
-if (innovationSmellRatio > maxInnovationSmellRatio)
-    walk(document.body, convertIntoBullshit);
+var substitutions;
 
 // ---------------------------------------------
 
+makeItSo();
+
+// ---------------------------------------------
+
+function makeItSo() {
+    substitutions = generateSubstitutions();
+    var innovationSmellRatio = nodeRatio(document.body, isInnovationRelated);
+    if (innovationSmellRatio > maxInnovationSmellRatio)
+        walk(document.body, convertIntoBullshit);
+}
 
 function generateSubstitutions() {
     var upperCasePhrasePairs = lowerCasePhrasePairs.map(capitalizePhrases);
@@ -146,9 +150,8 @@ function walk(root, callback) {
         }
     }
     function handleTextNode(node) {
-        if (node.parentElement.tagName.toLowerCase() !== "script") {
+        if (node.parentElement.tagName.toLowerCase() !== "script")
             callback(node);
-        }
     }
 }
 
