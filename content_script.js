@@ -1,6 +1,6 @@
 // In the generateSubstitutions function, the information will be compiled in the order listed below.
 
-var innovationWords = /entrepeneur|regulation|tech|technology|silicon|industry|industries|startup|innovative|innovation|computing|computer|data|storage|server|provider|app[\W]|apps|hardware|software/i;
+var innovationWords = /entrepreneur|regulation|tech|technology|silicon|industry|industries|startup|innovative|innovation|computing|computer|data|storage|server|provider|app[\W]|apps|hardware|software/i;
 
 var specialSubstitutions = [
     [ /Disrupt\s+NY/g, 'Rain Bullshit On NY' ],
