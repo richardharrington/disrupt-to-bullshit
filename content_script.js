@@ -123,29 +123,32 @@ function nodeCounts(root, predicate) {
 
 function walk(root, callback) {
 
-    recur(root);
+    recurOnNode(root);
 
-    function recur(node) {
-
-        var child, next;
-
+    function recurOnNode(node) {
         switch (node.nodeType) {
-            case 1:  // Element
-            case 9:  // Document
-            case 11: // Document fragment
-                child = node.firstChild;
-                while (child) {
-                    next = child.nextSibling;
-                    recur(child);
-                    child = next;
-                }
+            case 1:
+            case 9:
+            case 11:
+                walkChildren(node);
                 break;
+            case 3:
+                handleTextNode(node);
+        }
+    }
 
-            case 3: // Text node
-                if (node.parentElement.tagName.toLowerCase() !== "script") {
-                    callback(node);
-                }
-                break;
+    function walkChildren(node) {
+        var next;
+        var child = node.firstChild;
+        while (child) {
+            next = child.nextSibling;
+            recurOnNode(child);
+            child = next;
+        }
+    }
+    function handleTextNode(node) {
+        if (node.parentElement.tagName.toLowerCase() !== "script") {
+            callback(node);
         }
     }
 }
