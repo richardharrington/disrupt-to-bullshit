@@ -14,13 +14,15 @@ var specialSubstitutions = [
     [ /(\s+[a-z]+\s)+Disrupt/g, function(_, precedingWord) { return precedingWord + 'Rain Bullshit'; } ]
 ];
 
-var lowerCaseHelpingVerbs = ['being', 'be', 'were', 'been'];
+var lowerCaseHelpingVerbs = ['being', 'be', 'were', 'are', 'been', 'get', 'gets'];
 var lowerCasePastParticiple = 'disrupted';
 var lowerCasePastParticipleReplacement = 'drowned in bullshit';
 
 var lowerCasePhrasePairs = [
-    [ 'disrupted', 'rained bullshit on'],
+    [ 'so disruptive', 'such bullshit' ],
+    [ 'disrupted', 'rained bullshit on' ],
     [ 'disruptive', 'bullshit' ],
+    [ 'disruptions', 'bullshit' ],
     [ 'disruption', 'bullshit' ],
     [ '-disrupting', '-bullshitting' ],
     [ 'disrupting', 'raining bullshit on' ],
@@ -42,10 +44,9 @@ if (innovationSmellRatio > maxInnovationSmellRatio)
 // ---------------------------------------------
 
 
-
 function generateSubstitutions() {
     var upperCasePhrasePairs = lowerCasePhrasePairs.map(capitalizePhrases);
-    var upperCaseHelpingVerbs = lowerCaseHelpingVerbs.map(capitalizeWord);
+    var upperCaseHelpingVerbs = lowerCaseHelpingVerbs.map(capitalizePhrase);
 
     var phrasePairs = [].concat(lowerCasePhrasePairs, upperCasePhrasePairs);
     var helpingVerbs = [].concat(lowerCaseHelpingVerbs, upperCaseHelpingVerbs);
