@@ -22,7 +22,7 @@ var lowerCasePhrasePairs = [
     [ 'so disruptive', 'such bullshit' ],
     [ 'disrupted', 'rained bullshit on' ],
     [ 'disruptive', 'bullshit' ],
-    [ 'disruptions', 'bullshit' ],
+    [ 'disruptions', 'piles of bullshit' ],
     [ 'disruption', 'bullshit' ],
     [ '-disrupting', '-bullshitting' ],
     [ 'disrupting', 'raining bullshit on' ],
