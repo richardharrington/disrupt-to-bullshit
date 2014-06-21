@@ -9,9 +9,7 @@ var specialSubstitutions = [
     [ /Disrupt\s+San Francisco/g, 'Rain Bullshit On San Francisco' ],
     [ /Disrupt\s+Europe/g, 'Rain Bullshit On Europe' ],
     [ /Disrupt\s+Beijing/g, 'Rain Bullshit On Beijing' ],
-    [ /TechCrunch\s+Disrupt/g, 'TechCrunch Rain Bullshit' ],
-    // any capitalized Disrupt preceded by a lower-case word is probably the TechCrunch conference
-    [ /(\s+[a-z]+\s)+Disrupt/g, function(_, precedingWord) { return precedingWord + 'Rain Bullshit'; } ]
+    [ /TechCrunch\s+Disrupt/g, 'TechCrunch Rain Bullshit' ]
 ];
 
 var lowerCaseHelpingVerbs = ['being', 'be', 'were', 'are', 'been', 'get', 'gets'];
