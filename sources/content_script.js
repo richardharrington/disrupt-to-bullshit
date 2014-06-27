@@ -1,18 +1,11 @@
 var SUBSTITUTIONS = (function() {
 
+  // "<helping verb> <optional adverb> disrupted" =>
+  // "<helping verb> <optional adverb> drowned in bullshit"
   var specialSubstitutions = [
-    [ /Disrupt\s+NY/g, 'Rain Bullshit On NY' ],
-    [ /Disrupt\s+SF/g, 'Rain Bullshit On SF' ],
-    [ /Disrupt\s+New York/g, 'Rain Bullshit On New York' ],
-    [ /Disrupt\s+San Francisco/g, 'Rain Bullshit On San Francisco' ],
-    [ /Disrupt\s+Europe/g, 'Rain Bullshit On Europe' ],
-    [ /Disrupt\s+Beijing/g, 'Rain Bullshit On Beijing' ],
-    [ /TechCrunch\s+Disrupt/g, 'TechCrunch Rain Bullshit' ]
+    [ /(be|being|been|is|are|were|get|gets)\s+(\w+\s+)?disrupted/g, '$1 $2 drowned in bullshit'],
+    [ /(Be|Being|Been|Is|Are|Were|Get|Gets)\s+(\w+\s+)?Disrupted/g, '$1 $2 Drowned In Bullshit']
   ];
-
-  var lowerCaseHelpingVerbs = ['being', 'be', 'were', 'are', 'been', 'get', 'gets'];
-  var lowerCasePastParticiple = 'disrupted';
-  var lowerCasePastParticipleReplacement = 'drowned in bullshit';
 
   var lowerCasePhrasePairs = [
     [ 'so disruptive', 'such bullshit' ],
@@ -33,24 +26,16 @@ var SUBSTITUTIONS = (function() {
 
   function generateSubstitutions() {
     var upperCasePhrasePairs = lowerCasePhrasePairs.map(capitalizePhrases);
-    var upperCaseHelpingVerbs = lowerCaseHelpingVerbs.map(capitalizePhrase);
-
     var phrasePairs = [].concat(lowerCasePhrasePairs, upperCasePhrasePairs);
-    var helpingVerbs = [].concat(lowerCaseHelpingVerbs, upperCaseHelpingVerbs);
+    var regularSubstitutions = phrasePairs.map(generateSubstitution);
 
-    return [].concat(
-      specialSubstitutions,
-      helpingVerbs.map(generatePastParticipleSubstitution),
-      phrasePairs.map(generateRegularSubstitution)
-    );
+    return [].concat(specialSubstitutions, regularSubstitutions);
   }
 
   function capitalizePhrases(phrases) {
-    return phrases.map(capitalizePhrase);
-  }
-
-  function capitalizePhrase(phrase) {
-    return phrase.split(" ").map(capitalizeWord).join(" ");
+    return phrases.map(function(phrase) {
+      return phrase.split(" ").map(capitalizeWord).join(" ");
+    });
   }
 
   function capitalizeWord(word) {
@@ -64,30 +49,10 @@ var SUBSTITUTIONS = (function() {
     return String.fromCharCode(letter.charCodeAt(0) - 32);
   }
 
-  function generateRegularSubstitution(pair) {
+  function generateSubstitution(pair) {
     var regExp = new RegExp(pair[0], "g");
     var replacement = pair[1];
     return [regExp, replacement];
-  }
-
-  function generatePastParticipleSubstitution(helpingVerb) {
-    var pastParticiple = capitalizeBasedOnReferenceWord(lowerCasePastParticiple, helpingVerb);
-    var pastParticipleReplacement = capitalizeBasedOnReferenceWord(lowerCasePastParticipleReplacement, helpingVerb);
-    var regExp = new RegExp(helpingVerb + "\\s+(\\w+\\s)?" + pastParticiple, "g");
-    var replace = function(_, adverb) {
-      return helpingVerb + ' ' + (adverb || '') + ' ' + pastParticipleReplacement;
-    };
-    return [regExp, replace];
-  }
-
-  function capitalizeBasedOnReferenceWord(phrase, referenceWord) {
-    var isLowerCase = startsWithLowerCase(referenceWord);
-    return isLowerCase ? phrase : capitalizePhrase(phrase);
-  }
-
-  function startsWithLowerCase(str) {
-    var firstLetter = str[0];
-    return firstLetter.toLowerCase() === firstLetter;
   }
 
   return {
