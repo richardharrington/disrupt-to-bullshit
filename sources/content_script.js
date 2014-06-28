@@ -1,4 +1,4 @@
-var SUBSTITUTIONS = (function() {
+var DISRUPTION_SUBSTITUTIONS = (function() {
 
   // "<helping verb> <optional adverb> disrupted" =>
   // "<helping verb> <optional adverb> drowned in bullshit"
@@ -56,7 +56,7 @@ var SUBSTITUTIONS = (function() {
   }
 
   return {
-    disruptToBullshit: function(originalText) {
+    convert: function(originalText) {
       return substitutions.reduce(function(text, substitution) {
         var regExp = substitution[0];
         var replacement = substitution[1];
@@ -66,10 +66,10 @@ var SUBSTITUTIONS = (function() {
   };
 }());
 
-var INNOVATION_WORDS = /entrepreneur|regulation|tech|technology|silicon|industry|industries|startup|innovative|innovation|computing|computer|data|storage|server|provider|app[\W]|apps|hardware|software/i;
+var DISRUPTION_RELATED_WORDS = /entrepreneur|regulation|tech|technology|silicon|industry|industries|startup|innovative|innovation|computing|computer|data|storage|server|provider|app[\W]|apps|hardware|software/gi;
 
-var MAX_INNOVATION_SMELL_RATIO = 0.005; // More than 0.5% of nodes must contain at least
-                                        // one innovation-related word
+var MAX_DISRUPTION_RELATED_WORD_RATIO = 0.005; // More than 0.5% of nodes must contain at least
+                                               // one innovation-related word
 
 
 // ---------------------------------------------
@@ -79,9 +79,18 @@ makeItSo();
 // ---------------------------------------------
 
 function makeItSo() {
-  var innovationSmellRatio = nodeRatio(document.body, isInnovationRelated);
-  if (innovationSmellRatio > MAX_INNOVATION_SMELL_RATIO)
-    walk(document.body, convertIntoBullshit);
+  var disruptionRelatedWordRatio = nodeRatio(document.body, matchRegExpInNode.bind(null, DISRUPTION_RELATED_WORDS));
+  if (disruptionRelatedWordRatio > MAX_DISRUPTION_RELATED_WORD_RATIO)
+    walk(document.body, substituteTextNode.bind(null, DISRUPTION_SUBSTITUTIONS.convert));
+}
+
+function matchRegExpInNode(regExp, node) {
+  var text = node.nodeValue;
+  return text.match(regExp);
+}
+
+function substituteTextNode(substitute, node) {
+  node.nodeValue = substitute(node.nodeValue);
 }
 
 function nodeRatio(root, predicate) {
@@ -128,17 +137,11 @@ function walk(root, callback) {
       child = next;
     }
   }
+
   function handleTextNode(node) {
     if (node.parentElement.tagName.toLowerCase() !== "script")
       callback(node);
   }
 }
 
-function isInnovationRelated(node) {
-  var text = node.nodeValue;
-  return text.match(INNOVATION_WORDS);
-}
 
-function convertIntoBullshit(node) {
-  node.nodeValue = SUBSTITUTIONS.disruptToBullshit(node.nodeValue);
-}
