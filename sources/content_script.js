@@ -56,7 +56,7 @@ var DISRUPTION_SUBSTITUTIONS = (function() {
   }
 
   return {
-    convert: function(originalText) {
+    substitute: function(originalText) {
       return substitutions.reduce(function(text, substitution) {
         var regExp = substitution[0];
         var replacement = substitution[1];
@@ -66,12 +66,6 @@ var DISRUPTION_SUBSTITUTIONS = (function() {
   };
 }());
 
-var DISRUPTION_RELATED_WORDS = /entrepreneur|regulation|tech|technology|silicon|industry|industries|startup|innovative|innovation|computing|computer|data|storage|server|provider|app[\W]|apps|hardware|software/gi;
-
-var MAX_DISRUPTION_RELATED_WORD_RATIO = 0.005; // More than 0.5% of nodes must contain at least
-                                               // one innovation-related word
-
-
 // ---------------------------------------------
 
 makeItSo();
@@ -79,37 +73,12 @@ makeItSo();
 // ---------------------------------------------
 
 function makeItSo() {
-  var disruptionRelatedWordRatio = nodeRatio(document.body, matchRegExpInNode.bind(null, DISRUPTION_RELATED_WORDS));
-  if (disruptionRelatedWordRatio > MAX_DISRUPTION_RELATED_WORD_RATIO)
-    walk(document.body, substituteTextNode.bind(null, DISRUPTION_SUBSTITUTIONS.convert));
-}
-
-function matchRegExpInNode(regExp, node) {
-  var text = node.nodeValue;
-  return text.match(regExp);
+  var disruptToBullshit = substituteTextNode.bind(null, DISRUPTION_SUBSTITUTIONS.substitute);
+  walk(document.body, disruptToBullshit);
 }
 
 function substituteTextNode(substitute, node) {
   node.nodeValue = substitute(node.nodeValue);
-}
-
-function nodeRatio(root, predicate) {
-  var counts = nodeCounts(root, predicate);
-  return counts.whenPredicateTrue / counts.allNodes;
-}
-
-function nodeCounts(root, predicate) {
-  var allNodesCounter = 0;
-  var whenPredicateTrueCounter = 0;
-  walk(root, function(node) {
-    allNodesCounter++;
-    if (predicate(node))
-      whenPredicateTrueCounter++;
-  });
-  return {
-    allNodes: allNodesCounter,
-    whenPredicateTrue: whenPredicateTrueCounter
-  };
 }
 
 function walk(root, callback) {
