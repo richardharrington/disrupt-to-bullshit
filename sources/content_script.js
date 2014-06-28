@@ -73,16 +73,12 @@ makeItSo();
 // ---------------------------------------------
 
 function makeItSo() {
-  var disruptToBullshit = substituteTextNode.bind(null, DISRUPTION_SUBSTITUTIONS.substitute);
-  walk(document.body, disruptToBullshit);
+  walkTextNodes(document.body, function(node) {
+    node.nodeValue = DISRUPTION_SUBSTITUTIONS.substitute(node.nodeValue);
+  });
 }
 
-function substituteTextNode(substitute, node) {
-  node.nodeValue = substitute(node.nodeValue);
-}
-
-function walk(root, callback) {
-
+function walkTextNodes(root, callback) {
   recurOnNode(root);
 
   function recurOnNode(node) {
@@ -112,5 +108,3 @@ function walk(root, callback) {
       callback(node);
   }
 }
-
-
