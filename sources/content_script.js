@@ -3,8 +3,8 @@ var SUBSTITUTIONS = (function() {
   // "<helping verb> <optional adverb> disrupted" =>
   // "<helping verb> <optional adverb> drowned in bullshit"
   var specialSubstitutions = [
-    [ /(be|being|been|is|are|were|get|gets)\s+(\w+\s+)?disrupted/g, '$1 $2 drowned in bullshit'],
-    [ /(Be|Being|Been|Is|Are|Were|Get|Gets)\s+(\w+\s+)?Disrupted/g, '$1 $2 Drowned In Bullshit']
+    [ /(be|being|been|is|are|were|get|gets)\s+(\w+\s+)?disrupted/g, '$1 $2 covered in bullshit'],
+    [ /(Be|Being|Been|Is|Are|Were|Get|Gets)\s+(\w+\s+)?Disrupted/g, '$1 $2 Covered in Bullshit']
   ];
 
   var lowerCasePhrasePairs = [
