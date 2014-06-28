@@ -68,34 +68,20 @@
   }
 
   function walkTextNodes(root, callback) {
-    recurOnNode(root);
-
-    function recurOnNode(node) {
-      switch (node.nodeType) {
-        case 1:
-        case 9:
-        case 11:
-          walkChildren(node);
-          break;
-        case 3:
-          handleTextNode(node);
+    var scriptNodeBlocker = {
+      acceptNode: function(node) {
+        return isScriptNode(node) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
       }
-    }
+    };
 
-    function walkChildren(node) {
-      var next;
-      var child = node.firstChild;
-      while (child) {
-        next = child.nextSibling;
-        recurOnNode(child);
-        child = next;
-      }
-    }
+    var node;
+    var treeWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, scriptNodeBlocker, false);
+    while (node = treeWalker.nextNode())
+      callback(node);
+  }
 
-    function handleTextNode(node) {
-      if (node.parentElement.tagName.toLowerCase() !== "script")
-        callback(node);
-    }
+  function isScriptNode(node) {
+    return node.parentElement.tagName.toLowerCase() === "script";
   }
 
 })();
