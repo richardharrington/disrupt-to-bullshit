@@ -2,7 +2,7 @@
 
   var DISRUPTION_SUBSTITUTIONS = (function() {
 
-    var endingMap = {
+    var suffixMap = {
       ed: 'rained bullshit on',
       ively: 'by means of bullshit',
       ive: 'bullshit',
@@ -10,9 +10,11 @@
       ion: 'bullshit',
       ing: 'raining bullshit on',
       or: 'bullshitter',
-      s: 'rains bullshit on',
-      '': 'rain bullshit on'
+      s: 'rains bullshit on'
     };
+
+    var suffixes = Object.keys(suffixMap);
+    var disruptWithSuffixes = new RegExp("\\b([Dd])isrupt(" + suffixes.join("|") + ")?\\b", "g");
 
     var substitutions = [
 
@@ -24,12 +26,15 @@
       [ /so disruptive/g, 'such bullshit' ],
       [ /So Disruptive/g, 'Such Bullshit' ],
       [ /so disruptively/g, 'by means of such bullshit' ],
-      [ /So Disruptively/g, 'By Means Of Such Bullshit' ],
+      [ /So Disruptively/g, 'by Means of Such Bullshit' ],
       [ /-disrupting/g, '-bullshitting' ],
       [ /-Disrupting/g, '-Bullshitting' ],
-      [ /\b([Dd])isrupt(ed|ively|ive|ions|ion|ing|or|s)?\b/g, function(_, firstLetter, ending) {
+      [ /disrupt\b/g, 'rain bullshit on' ],
+      [ /Disrupt\b/g, 'Rain Bullshit on' ],
+
+      [ disruptWithSuffixes, function(_, firstLetter, suffix) {
           var isUpperCase = firstLetter === 'D';
-          var phrase = endingMap[ending || ''];
+          var phrase = suffixMap[suffix];
           return isUpperCase ? capitalizePhrase(phrase) : phrase;
       }]
     ];
