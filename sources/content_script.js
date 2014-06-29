@@ -45,7 +45,9 @@
     var substitutions = specialSubstitutions.concat([
 
       [ pastParticipleRegExp, substituteWithCorrectCase(function(_, helpingVerb, adverb) {
-          return helpingVerb + ' ' + (adverb || '') + ' ' + pastParticipleSubstitution;
+          return helpingVerb.toLowerCase() + ' ' +
+                 (adverb || '').toLowerCase() + ' ' +
+                 pastParticipleSubstitution;
       })],
 
       [ exactPhrasesRegExp, substituteWithCorrectCase(function(wholeMatch) {
@@ -73,7 +75,7 @@
 
     function capitalizePhrase(phrase) {
       return phrase.split(' ').map(function(word) {
-        return (isLowerCase(word) && word.length > 2) ? capitalizeWord(word) : word;
+        return (word.length > 2) ? capitalizeWord(word) : word;
       }).join(' ');
     }
 
@@ -84,10 +86,6 @@
       var capitalizedFirstLetter = String.fromCharCode(firstLetterCode - 32);
       var result = word.substr(0, firstLetterIdx) + capitalizedFirstLetter + word.substr(firstLetterIdx + 1);
       return result;
-    }
-
-    function isLowerCase(word) {
-      return word.toLowerCase() === word;
     }
 
     return {
