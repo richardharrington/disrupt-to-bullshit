@@ -7,26 +7,26 @@
     // be part of "substitute" below and would check the ratio of lower- to upper-case words
     // in the node. (other thing we need to check is if it's preceded by a preposition).
 
-    // Then if we're feeling ambitious, add back in blocking of non-innovation related uses
-    // of disruption, by searching in the parent node. But don't worry about this too much.
-
-    var specialSubstitutions = [
+    var specialSubs = [
       [ /Disrupt\s+(NY|SF|New\s+York|San\s+Francisco|Europe|Beijing|Hardware|Battlefield)/g,
               'Bullshitpalooza $1' ],
       [ /TechCrunch\s+Disrupt/g, 'TechCrunch Bullshitpalooza' ]
     ];
 
-    var exactPhraseMap = {
+    var helpingVerbs = ['being', 'been', 'be', 'is', 'are', 'were', 'gets', 'get'];
+
+    var pastParticipleMapLower = {
+      'disrupted': 'covered in bullshit'
+    };
+
+    var exactPhraseMapLower = {
       'so disruptive': 'such bullshit',
       'so disruptively': 'by means of such bullshit',
       '-disrupting': '-bullshitting',
       'disrupt': 'rain bullshit on'
     };
 
-    var pastParticipleSubstitution = 'covered in bullshit';
-    var helpingVerbs = ['being', 'been', 'be', 'is', 'are', 'were', 'gets', 'get'];
-
-    var suffixMap = {
+    var suffixMapLower = {
       ed: 'rained bullshit on',
       ively: 'by means of bullshit',
       ive: 'bullshit',
@@ -34,47 +34,60 @@
       ion: 'bullshit',
       ing: 'raining bullshit on',
       or: 'bullshitter',
+      er: 'bullshitter',
+      ors: 'bullshitters',
+      ers: 'bullshitters',
       s: 'rains bullshit on'
     };
 
-    var exactPhrases = Object.keys(exactPhraseMap);
-    var suffixes = Object.keys(suffixMap);
+    var pastParticiple = Object.keys(pastParticipleMapLower)[0];
+    var exactPhraseKeys = Object.keys(exactPhraseMapLower);
+    var suffixKeys = Object.keys(suffixMapLower);
+
+    var pastParticipleMapUpper = mapToUpper(pastParticipleMapLower);
+    var exactPhraseMapUpper = mapToUpper(exactPhraseMapLower);
+    var suffixMapUpper = mapToUpper(suffixMapLower);
 
     // "<helping verb> <optional adverb> disrupted"
     var pastParticiplePhraseRegExp =
             new RegExp("\\b(" + altMatches(helpingVerbs) + ")\\s+(\\w+\\s+)?disrupted\\b", "gi");
 
-    var exactPhrasesRegExp =
-            new RegExp("\\b" + altMatches(exactPhrases) + "\\b", "gi");
+    var exactPhraseKeysRegExp =
+            new RegExp("\\b" + altMatches(exactPhraseKeys) + "\\b", "gi");
 
     var disruptWithSuffixesRegExp =
-            new RegExp("\\bdisrupt(" + altMatches(suffixes) + ")\\b", "gi");
+            new RegExp("\\bdisrupt(" + altMatches(suffixKeys) + ")\\b", "gi");
 
-    var substitutions = specialSubstitutions.concat([
+    var substitutions = specialSubs.concat([
 
-      [ pastParticiplePhraseRegExp, substituteWithCorrectCase(function(_, helpingVerb, adverb) {
-          return helpingVerb.toLowerCase() + ' ' +
-                 (adverb || '').toLowerCase() + ' ' +
-                 pastParticipleSubstitution;
-      })],
+      [ pastParticiplePhraseRegExp, function(wholeMatch, helpingVerb, adverb) {
+          var pastParticipleSub = isDisruptCapitalized(wholeMatch) ?
+                  pastParticipleMapUpper[pastParticiple] :
+                  pastParticipleMapLower[pastParticiple];
+          return helpingVerb + ' ' + (adverb || '') + ' ' + pastParticipleSub;
+      }],
 
-      [ exactPhrasesRegExp, substituteWithCorrectCase(function(wholeMatch) {
-          return exactPhraseMap[wholeMatch.toLowerCase()];
-      })],
+      [ exactPhraseKeysRegExp, function(wholeMatch) {
+          var phraseKey = wholeMatch.toLowerCase();
+          return isDisruptCapitalized(wholeMatch) ? exactPhraseMapUpper[phraseKey] : exactPhraseMapLower[phraseKey];
+      }],
 
-      [ disruptWithSuffixesRegExp, substituteWithCorrectCase(function(_, suffix) {
-          return suffixMap[suffix];
-      })]
+      [ disruptWithSuffixesRegExp, function(wholeMatch, suffix) {
+          return isDisruptCapitalized(wholeMatch) ? suffixMapUpper[suffix] : suffixMapLower[suffix];
+      }]
 
     ]);
 
-    function substituteWithCorrectCase(f) {
-      return function(wholeMatch /* plus other variadic args */) {
-        var args = Array.prototype.slice.call(arguments);
-        var substitution = f.apply(null, args);
-        var isDisruptCapitalized = wholeMatch.indexOf('Disrupt') !== -1;
-        return isDisruptCapitalized ? capitalizePhrase(substitution) : substitution;
+    function mapToUpper(mapToLower) {
+      var mapToUpper = {};
+      for (prop in mapToLower) {
+        mapToUpper[prop] = capitalizePhrase(mapToLower[prop]);
       }
+      return mapToUpper;
+    }
+
+    function isDisruptCapitalized(str) {
+      return str.indexOf('Disrupt') !== -1;
     }
 
     function altMatches(strs) {
