@@ -1,34 +1,29 @@
 (function() {
 
-  var DISRUPTION_SUBSTITUTIONS = (function() {
+  var DISRUPT_TO_BULLSHIT_RULES = {
 
-    // TODO: add more special substitutions here to detect Disrupt, the conference. Might
-    // have to add an extra function outside the whole regexp reduction entirely, which would
-    // be part of "substitute" below and would check the ratio of lower- to upper-case words
-    // in the node. (other thing we need to check is if it's preceded by a preposition).
-
-    var specialSubs = [
+    // These custom regexp pairs are to make sure we catch as many instances
+    // of the conference name as possible.
+    customRegExpPairs: [
+      // Followed by place names, "Hardware", or "Battlefield"
       [ /Disrupt\s+(NY|SF|New\s+York|San\s+Francisco|Europe|Beijing|Hardware|Battlefield)/g,
               'Bullshitpalooza $1' ],
-      [ /TechCrunch\s+Disrupt/g, 'TechCrunch Bullshitpalooza' ]
-    ];
+      // Preceded by "TechCrunch", or any preposition
+      [ /\b(TechCrunch|[Aa]bout|[Oo]f|[Aa]fter|[Aa]round|[Aa]t|[Bb]efore|[Dd]uring|[Ff]ollowing|[Ff]or|[Ii]n|[Ii]nside|[Ll]ike|[Oo]n|[Oo]utside|[Rr]egarding|[Ss]ince|[Tt]oward|[Tt]owards|[Uu]nlike|[Uu]ntil|[Vv]ia|[Ww]ith|[Ww]ithin|[Ww]ithout)\s+Disrupt\b/g,
+              '$1 Bullshitpalooza' ]
+    ],
 
-    var rootVerb = 'disrupt';
+    rootVerb: 'disrupt',
+    helpingVerbs: ['being', 'been', 'be', 'is', 'are', 'was', 'were', 'gets', 'get'],
+    pastParticipleMapToLowerCase: { 'disrupted': 'covered in bullshit' },
 
-    var helpingVerbs = ['being', 'been', 'be', 'is', 'are', 'were', 'gets', 'get'];
-
-    var pastParticipleMapLower = {
-      'disrupted': 'covered in bullshit'
-    };
-
-    var exactPhraseMapLower = {
+    exactPhraseMapToLowerCase: {
       'so disruptive': 'such bullshit',
       'so disruptively': 'by means of such bullshit',
-      '-disrupting': '-bullshitting',
-      'disrupt': 'rain bullshit on'
-    };
+      '-disrupting': '-bullshitting'
+    },
 
-    var suffixMapLower = {
+    suffixMapToLowerCase: {
       ed: 'rained bullshit on',
       ively: 'by means of bullshit',
       ive: 'bullshit',
@@ -39,25 +34,54 @@
       er: 'bullshitter',
       ors: 'bullshitters',
       ers: 'bullshitters',
-      s: 'rains bullshit on'
+      s: 'rains bullshit on',
+      '': 'rain bullshit on'
+    }
+
+  };
+
+  // ---------------------------------------------
+
+  var start = Date.now();
+  makeItSo();
+  console.log("Time elapsed: ", Date.now() - start);
+
+  function makeItSo() {
+    var disruptToBullshit = createVerbConverter(DISRUPT_TO_BULLSHIT_RULES);
+    walkTextNodes(document.body, function(node) {
+      node.nodeValue = disruptToBullshit(node.nodeValue);
+    });
+  }
+
+  // ---------------------------------------------
+
+  function walkTextNodes(root, callback) {
+    var scriptNodeBlocker = {
+      acceptNode: function(node) {
+        return node.parentElement.tagName.toLowerCase() === "script" ?
+               NodeFilter.FILTER_REJECT :
+               NodeFilter.FILTER_ACCEPT;
+      }
     };
 
-    var pastParticiple = Object.keys(pastParticipleMapLower)[0];
-    var exactPhraseKeys = Object.keys(exactPhraseMapLower);
-    var suffixKeys = Object.keys(suffixMapLower);
+    var node;
+    var treeWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, scriptNodeBlocker, false);
+    while (node = treeWalker.nextNode())
+      callback(node);
+  }
 
-    var pastParticipleMap = {
-      lower: pastParticipleMapLower,
-      upper: mapToUpper(pastParticipleMapLower)
-    };
-    var exactPhraseMap = {
-      lower: exactPhraseMapLower,
-      upper: mapToUpper(exactPhraseMapLower)
-    };
-    var suffixMap = {
-      lower: suffixMapLower,
-      upper: mapToUpper(suffixMapLower)
-    };
+  function createVerbConverter(rules) {
+    var customRegExpPairs = rules.customRegExpPairs;
+    var rootVerb = rules.rootVerb;
+    var helpingVerbs = rules.helpingVerbs;
+
+    var pastParticipleMap = createLowerAndUpperMap(rules.pastParticipleMapToLowerCase);
+    var exactPhraseMap = createLowerAndUpperMap(rules.exactPhraseMapToLowerCase);
+    var suffixMap = createLowerAndUpperMap(rules.suffixMapToLowerCase);
+
+    var pastParticiple = Object.keys(rules.pastParticipleMapToLowerCase)[0];
+    var exactPhraseKeys = Object.keys(rules.exactPhraseMapToLowerCase);
+    var suffixKeys = Object.keys(rules.suffixMapToLowerCase);
 
     // e.g. "<helping verb> <optional adverb> disrupted"
     var pastParticiplePhraseRegExp =
@@ -67,13 +91,13 @@
             new RegExp("\\b" + altMatches(exactPhraseKeys) + "\\b", "gi");
 
     var verbWithSuffixRegExp =
-            new RegExp("\\b" + rootVerb + "(" + altMatches(suffixKeys) + ")\\b", "gi");
+            new RegExp("\\b" + rootVerb + "(" + altMatches(suffixKeys) + ")?\\b", "gi");
 
-    var substitutions = specialSubs.concat([
+    var conversions = customRegExpPairs.concat([
 
       [ pastParticiplePhraseRegExp, function(wholeMatch, helpingVerb, adverb) {
-          var pastParticipleSub = withCorrectCase(pastParticipleMap, pastParticiple, wholeMatch);
-          return helpingVerb + ' ' + (adverb || '') + ' ' + pastParticipleSub;
+          var pastParticipleReplacement = withCorrectCase(pastParticipleMap, pastParticiple, wholeMatch);
+          return helpingVerb + ' ' + (adverb || '') + ' ' + pastParticipleReplacement;
       }],
 
       [ exactPhraseRegExp, function(wholeMatch) {
@@ -81,21 +105,29 @@
       }],
 
       [ verbWithSuffixRegExp, function(wholeMatch, suffix) {
-          return withCorrectCase(suffixMap, suffix, wholeMatch);
+          return withCorrectCase(suffixMap, (suffix || ''), wholeMatch);
       }]
 
     ]);
 
-    function withCorrectCase(map, key, referencePhrase) {
-      return isVerbLowerCase(referencePhrase) ? map.lower[key] : map.upper[key];
+    return convert;
+
+    function convert(originalText) {
+      return conversions.reduce(function(text, conversion) {
+        return text.replace(conversion[0], conversion[1]);
+      }, originalText);
     }
 
-    function mapToUpper(mapToLower) {
+    function createLowerAndUpperMap(mapToLower) {
       var mapToUpper = {};
-      for (prop in mapToLower) {
+      for (prop in mapToLower)
         mapToUpper[prop] = capitalizePhrase(mapToLower[prop]);
-      }
-      return mapToUpper;
+
+      return {lower: mapToLower, upper: mapToUpper};
+    }
+
+    function withCorrectCase(map, key, referencePhrase) {
+      return isVerbLowerCase(referencePhrase) ? map.lower[key] : map.upper[key];
     }
 
     function isVerbLowerCase(str) {
@@ -120,44 +152,6 @@
       var result = word.substr(0, firstLetterIdx) + capitalizedFirstLetter + word.substr(firstLetterIdx + 1);
       return result;
     }
-
-    return {
-      substitute: function(originalText) {
-        return substitutions.reduce(function(text, substitution) {
-          return text.replace(substitution[0], substitution[1]);
-        }, originalText);
-      }
-    };
-  }());
-
-  // ---------------------------------------------
-
-  makeItSo();
-
-  // ---------------------------------------------
-
-  function makeItSo() {
-    walkTextNodes(document.body, function(node) {
-      node.nodeValue = DISRUPTION_SUBSTITUTIONS.substitute(node.nodeValue);
-    });
   }
-
-  function walkTextNodes(root, callback) {
-    var scriptNodeBlocker = {
-      acceptNode: function(node) {
-        return isScriptNode(node) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
-      }
-    };
-
-    var node;
-    var treeWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, scriptNodeBlocker, false);
-    while (node = treeWalker.nextNode())
-      callback(node);
-  }
-
-  function isScriptNode(node) {
-    return node.parentElement.tagName.toLowerCase() === "script";
-  }
-
 })();
 
