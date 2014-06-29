@@ -46,39 +46,49 @@
     var exactPhraseKeys = Object.keys(exactPhraseMapLower);
     var suffixKeys = Object.keys(suffixMapLower);
 
-    var pastParticipleMapUpper = mapToUpper(pastParticipleMapLower);
-    var exactPhraseMapUpper = mapToUpper(exactPhraseMapLower);
-    var suffixMapUpper = mapToUpper(suffixMapLower);
+    var pastParticipleMap = {
+      lower: pastParticipleMapLower,
+      upper: mapToUpper(pastParticipleMapLower)
+    };
+    var exactPhraseMap = {
+      lower: exactPhraseMapLower,
+      upper: mapToUpper(exactPhraseMapLower)
+    };
+    var suffixMap = {
+      lower: suffixMapLower,
+      upper: mapToUpper(suffixMapLower)
+    };
 
     // e.g. "<helping verb> <optional adverb> disrupted"
     var pastParticiplePhraseRegExp =
             new RegExp("\\b(" + altMatches(helpingVerbs) + ")\\s+(\\w+\\s+)?" + pastParticiple + "\\b", "gi");
 
-    var exactPhraseKeysRegExp =
+    var exactPhraseRegExp =
             new RegExp("\\b" + altMatches(exactPhraseKeys) + "\\b", "gi");
 
-    var disruptWithSuffixesRegExp =
+    var verbWithSuffixRegExp =
             new RegExp("\\b" + rootVerb + "(" + altMatches(suffixKeys) + ")\\b", "gi");
 
     var substitutions = specialSubs.concat([
 
       [ pastParticiplePhraseRegExp, function(wholeMatch, helpingVerb, adverb) {
-          var pastParticipleSub = isVerbLowerCase(wholeMatch) ?
-                  pastParticipleMapLower[pastParticiple] :
-                  pastParticipleMapUpper[pastParticiple];
+          var pastParticipleSub = withCorrectCase(pastParticipleMap, pastParticiple, wholeMatch);
           return helpingVerb + ' ' + (adverb || '') + ' ' + pastParticipleSub;
       }],
 
-      [ exactPhraseKeysRegExp, function(wholeMatch) {
-          var phraseKey = wholeMatch.toLowerCase();
-          return isVerbLowerCase(wholeMatch) ? exactPhraseMapLower[phraseKey] : exactPhraseMapUpper[phraseKey];
+      [ exactPhraseRegExp, function(wholeMatch) {
+          return withCorrectCase(exactPhraseMap, wholeMatch.toLowerCase(), wholeMatch);
       }],
 
-      [ disruptWithSuffixesRegExp, function(wholeMatch, suffix) {
-          return isVerbLowerCase(wholeMatch) ? suffixMapLower[suffix] : suffixMapUpper[suffix];
+      [ verbWithSuffixRegExp, function(wholeMatch, suffix) {
+          return withCorrectCase(suffixMap, suffix, wholeMatch);
       }]
 
     ]);
+
+    function withCorrectCase(map, key, referencePhrase) {
+      return isVerbLowerCase(referencePhrase) ? map.lower[key] : map.upper[key];
+    }
 
     function mapToUpper(mapToLower) {
       var mapToUpper = {};
