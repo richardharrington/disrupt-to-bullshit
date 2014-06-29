@@ -13,6 +13,8 @@
       [ /TechCrunch\s+Disrupt/g, 'TechCrunch Bullshitpalooza' ]
     ];
 
+    var rootVerb = 'disrupt';
+
     var helpingVerbs = ['being', 'been', 'be', 'is', 'are', 'were', 'gets', 'get'];
 
     var pastParticipleMapLower = {
@@ -48,32 +50,32 @@
     var exactPhraseMapUpper = mapToUpper(exactPhraseMapLower);
     var suffixMapUpper = mapToUpper(suffixMapLower);
 
-    // "<helping verb> <optional adverb> disrupted"
+    // e.g. "<helping verb> <optional adverb> disrupted"
     var pastParticiplePhraseRegExp =
-            new RegExp("\\b(" + altMatches(helpingVerbs) + ")\\s+(\\w+\\s+)?disrupted\\b", "gi");
+            new RegExp("\\b(" + altMatches(helpingVerbs) + ")\\s+(\\w+\\s+)?" + pastParticiple + "\\b", "gi");
 
     var exactPhraseKeysRegExp =
             new RegExp("\\b" + altMatches(exactPhraseKeys) + "\\b", "gi");
 
     var disruptWithSuffixesRegExp =
-            new RegExp("\\bdisrupt(" + altMatches(suffixKeys) + ")\\b", "gi");
+            new RegExp("\\b" + rootVerb + "(" + altMatches(suffixKeys) + ")\\b", "gi");
 
     var substitutions = specialSubs.concat([
 
       [ pastParticiplePhraseRegExp, function(wholeMatch, helpingVerb, adverb) {
-          var pastParticipleSub = isDisruptCapitalized(wholeMatch) ?
-                  pastParticipleMapUpper[pastParticiple] :
-                  pastParticipleMapLower[pastParticiple];
+          var pastParticipleSub = isVerbLowerCase(wholeMatch) ?
+                  pastParticipleMapLower[pastParticiple] :
+                  pastParticipleMapUpper[pastParticiple];
           return helpingVerb + ' ' + (adverb || '') + ' ' + pastParticipleSub;
       }],
 
       [ exactPhraseKeysRegExp, function(wholeMatch) {
           var phraseKey = wholeMatch.toLowerCase();
-          return isDisruptCapitalized(wholeMatch) ? exactPhraseMapUpper[phraseKey] : exactPhraseMapLower[phraseKey];
+          return isVerbLowerCase(wholeMatch) ? exactPhraseMapLower[phraseKey] : exactPhraseMapUpper[phraseKey];
       }],
 
       [ disruptWithSuffixesRegExp, function(wholeMatch, suffix) {
-          return isDisruptCapitalized(wholeMatch) ? suffixMapUpper[suffix] : suffixMapLower[suffix];
+          return isVerbLowerCase(wholeMatch) ? suffixMapLower[suffix] : suffixMapUpper[suffix];
       }]
 
     ]);
@@ -86,8 +88,8 @@
       return mapToUpper;
     }
 
-    function isDisruptCapitalized(str) {
-      return str.indexOf('Disrupt') !== -1;
+    function isVerbLowerCase(str) {
+      return str.indexOf(rootVerb) !== -1;
     }
 
     function altMatches(strs) {
