@@ -2,6 +2,13 @@
 
   var DISRUPTION_SUBSTITUTIONS = (function() {
 
+    var exactPhraseMap = {
+      'so disruptive': 'such bullshit',
+      'so disruptively': 'by means of such bullshit',
+      '-disrupting': '-bullshitting',
+      'disrupt': 'rain bullshit on'
+    };
+
     var suffixMap = {
       ed: 'rained bullshit on',
       ively: 'by means of bullshit',
@@ -13,34 +20,36 @@
       s: 'rains bullshit on'
     };
 
+    var exactPhrases = Object.keys(exactPhraseMap);
+    var exactPhrasesRegExp = new RegExp("\\b" + exactPhrases.join("|") + "\\b", "gi");
+
     var suffixes = Object.keys(suffixMap);
-    var disruptWithSuffixes = new RegExp("\\b([Dd])isrupt(" + suffixes.join("|") + ")?\\b", "g");
+    var disruptWithSuffixesRegExp = new RegExp("\\bdisrupt(" + suffixes.join("|") + ")\\b", "gi");
 
     var substitutions = [
 
       [ /Disrupt\s+(NY|SF|New York|San Francisco|Europe|Beijing)/g, 'Bullshitpalooza $1' ],
-      [ /TechCrunch\s+Disrupt/g, 'BullshitPalooza' ],
+      [ /TechCrunch\s+Disrupt/g, 'Bullshitpalooza' ],
 
       // "<helping verb> <optional adverb> disrupted" =>
       // "<helping verb> <optional adverb> covered in bullshit"
       [ /(be|being|been|is|are|were|get|gets)\s+(\w+\s+)?disrupted/g, '$1 $2 covered in bullshit' ],
       [ /(Be|Being|Been|Is|Are|Were|Get|Gets)\s+(\w+\s+)?Disrupted/g, '$1 $2 Covered in Bullshit' ],
 
-      [ /so disruptive/g, 'such bullshit' ],
-      [ /So Disruptive/g, 'Such Bullshit' ],
-      [ /so disruptively/g, 'by means of such bullshit' ],
-      [ /So Disruptively/g, 'by Means of Such Bullshit' ],
-      [ /-disrupting/g, '-bullshitting' ],
-      [ /-Disrupting/g, '-Bullshitting' ],
-      [ /disrupt\b/g, 'rain bullshit on' ],
-      [ /Disrupt\b/g, 'Rain Bullshit on' ],
+      [ exactPhrasesRegExp, function(wholeMatch) {
+          var substitution = exactPhraseMap[wholeMatch];
+          return isDisruptCapitalized(wholeMatch) ? capitalizePhrase(substitution) : substitution;
+      }],
 
-      [ disruptWithSuffixes, function(_, firstLetter, suffix) {
-          var isUpperCase = firstLetter === 'D';
-          var phrase = suffixMap[suffix];
-          return isUpperCase ? capitalizePhrase(phrase) : phrase;
+      [ disruptWithSuffixesRegExp, function(wholeMatch, suffix) {
+          var substitution = suffixMap[suffix];
+          return isDisruptCapitalized(wholeMatch) ? capitalizePhrase(substitution) : substitution;
       }]
     ];
+
+    function isDisruptCapitalized(phrase) {
+      return phrase.indexOf('Disrupt') !== -1;
+    }
 
     function capitalizePhrase(phrase) {
       return phrase.split(' ').map(function(word) {
@@ -49,9 +58,11 @@
     }
 
     function capitalizeWord(word) {
-      var firstLetterCode = word.charCodeAt(0);
+      // string can begin with hyphen in the case of "-disrupting"
+      var firstLetterIdx = (word[0] === '-') ? 1 : 0;
+      var firstLetterCode = word.charCodeAt(firstLetterIdx);
       var capitalizedFirstLetter = String.fromCharCode(firstLetterCode - 32);
-      return capitalizedFirstLetter + word.substr(1);
+      return word.substr(0, firstLetterIdx) + capitalizedFirstLetter + word.substr(firstLetterIdx + 1);
     }
 
     return {
