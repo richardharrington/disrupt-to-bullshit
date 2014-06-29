@@ -2,12 +2,20 @@
 
   var DISRUPTION_SUBSTITUTIONS = (function() {
 
+    var specialSubstitutions = [
+      [ /Disrupt\s+(NY|SF|New\s+York|San\s+Francisco|Europe|Beijing)/g, 'Bullshitpalooza $1' ],
+      [ /TechCrunch\s+Disrupt/g, 'Bullshitpalooza' ]
+    ];
+
     var exactPhraseMap = {
       'so disruptive': 'such bullshit',
       'so disruptively': 'by means of such bullshit',
       '-disrupting': '-bullshitting',
       'disrupt': 'rain bullshit on'
     };
+
+    var pastParticipleSubstitution = 'covered in bullshit';
+    var helpingVerbs = ['being', 'been', 'be', 'is', 'are', 'were', 'gets', 'get'];
 
     var suffixMap = {
       ed: 'rained bullshit on',
@@ -21,39 +29,50 @@
     };
 
     var exactPhrases = Object.keys(exactPhraseMap);
-    var exactPhrasesRegExp = new RegExp("\\b" + exactPhrases.join("|") + "\\b", "gi");
-
     var suffixes = Object.keys(suffixMap);
-    var disruptWithSuffixesRegExp = new RegExp("\\bdisrupt(" + suffixes.join("|") + ")\\b", "gi");
 
-    var substitutions = [
+    // "<helping verb> <optional adverb> disrupted"
+    var pastParticipleRegExp =
+            new RegExp("\\b(" + altMatches(helpingVerbs) + ")\\s+(\\w+\\s+)?disrupted\\b", "gi");
 
-      [ /Disrupt\s+(NY|SF|New York|San Francisco|Europe|Beijing)/g, 'Bullshitpalooza $1' ],
-      [ /TechCrunch\s+Disrupt/g, 'Bullshitpalooza' ],
+    var exactPhrasesRegExp =
+            new RegExp("\\b" + altMatches(exactPhrases) + "\\b", "gi");
 
-      // "<helping verb> <optional adverb> disrupted" =>
-      // "<helping verb> <optional adverb> covered in bullshit"
-      [ /(be|being|been|is|are|were|get|gets)\s+(\w+\s+)?disrupted/g, '$1 $2 covered in bullshit' ],
-      [ /(Be|Being|Been|Is|Are|Were|Get|Gets)\s+(\w+\s+)?Disrupted/g, '$1 $2 Covered in Bullshit' ],
+    var disruptWithSuffixesRegExp =
+            new RegExp("\\bdisrupt(" + altMatches(suffixes) + ")\\b", "gi");
 
-      [ exactPhrasesRegExp, function(wholeMatch) {
-          var substitution = exactPhraseMap[wholeMatch];
-          return isDisruptCapitalized(wholeMatch) ? capitalizePhrase(substitution) : substitution;
-      }],
+    var substitutions = specialSubstitutions.concat([
 
-      [ disruptWithSuffixesRegExp, function(wholeMatch, suffix) {
-          var substitution = suffixMap[suffix];
-          return isDisruptCapitalized(wholeMatch) ? capitalizePhrase(substitution) : substitution;
-      }]
-    ];
+      [ pastParticipleRegExp, substituteWithCorrectCase(function(_, helpingVerb, adverb) {
+          return helpingVerb + ' ' + (adverb || '') + ' ' + pastParticipleSubstitution;
+      })],
 
-    function isDisruptCapitalized(phrase) {
-      return phrase.indexOf('Disrupt') !== -1;
+      [ exactPhrasesRegExp, substituteWithCorrectCase(function(wholeMatch) {
+          return exactPhraseMap[wholeMatch.toLowerCase()];
+      })],
+
+      [ disruptWithSuffixesRegExp, substituteWithCorrectCase(function(_, suffix) {
+          return suffixMap[suffix];
+      })]
+
+    ]);
+
+    function substituteWithCorrectCase(f) {
+      return function(wholeMatch /* plus other variadic args */) {
+        var args = Array.prototype.slice.call(arguments);
+        var substitution = f.apply(null, args);
+        var isDisruptCapitalized = wholeMatch.indexOf('Disrupt') !== -1;
+        return isDisruptCapitalized ? capitalizePhrase(substitution) : substitution;
+      }
+    }
+
+    function altMatches(strs) {
+      return strs.join("|");
     }
 
     function capitalizePhrase(phrase) {
       return phrase.split(' ').map(function(word) {
-        return (word.length > 2) ? capitalizeWord(word) : word;
+        return (isLowerCase(word) && word.length > 2) ? capitalizeWord(word) : word;
       }).join(' ');
     }
 
@@ -62,7 +81,12 @@
       var firstLetterIdx = (word[0] === '-') ? 1 : 0;
       var firstLetterCode = word.charCodeAt(firstLetterIdx);
       var capitalizedFirstLetter = String.fromCharCode(firstLetterCode - 32);
-      return word.substr(0, firstLetterIdx) + capitalizedFirstLetter + word.substr(firstLetterIdx + 1);
+      var result = word.substr(0, firstLetterIdx) + capitalizedFirstLetter + word.substr(firstLetterIdx + 1);
+      return result;
+    }
+
+    function isLowerCase(word) {
+      return word.toLowerCase() === word;
     }
 
     return {
