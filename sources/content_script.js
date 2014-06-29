@@ -18,6 +18,9 @@
 
     var substitutions = [
 
+      [ /Disrupt\s+(NY|SF|New York|San Francisco|Europe|Beijing)/g, 'Bullshitpalooza $1' ],
+      [ /TechCrunch\s+Disrupt/g, 'BullshitPalooza' ],
+
       // "<helping verb> <optional adverb> disrupted" =>
       // "<helping verb> <optional adverb> covered in bullshit"
       [ /(be|being|been|is|are|were|get|gets)\s+(\w+\s+)?disrupted/g, '$1 $2 covered in bullshit' ],
