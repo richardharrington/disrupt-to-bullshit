@@ -2,6 +2,14 @@
 
   var DISRUPTION_SUBSTITUTIONS = (function() {
 
+    // TODO: add more special substitutions here to detect Disrupt, the conference. Might
+    // have to add an extra function outside the whole regexp reduction entirely, which would
+    // be part of "substitute" below and would check the ratio of lower- to upper-case words
+    // in the node. (other thing we need to check is if it's preceded by a preposition).
+
+    // Then if we're feeling ambitious, add back in blocking of non-innovation related uses
+    // of disruption, by searching in the parent node. But don't worry about this too much.
+
     var specialSubstitutions = [
       [ /Disrupt\s+(NY|SF|New\s+York|San\s+Francisco|Europe|Beijing|Hardware|Battlefield)/g,
               'Bullshitpalooza $1' ],
@@ -33,7 +41,7 @@
     var suffixes = Object.keys(suffixMap);
 
     // "<helping verb> <optional adverb> disrupted"
-    var pastParticipleRegExp =
+    var pastParticiplePhraseRegExp =
             new RegExp("\\b(" + altMatches(helpingVerbs) + ")\\s+(\\w+\\s+)?disrupted\\b", "gi");
 
     var exactPhrasesRegExp =
@@ -44,7 +52,7 @@
 
     var substitutions = specialSubstitutions.concat([
 
-      [ pastParticipleRegExp, substituteWithCorrectCase(function(_, helpingVerb, adverb) {
+      [ pastParticiplePhraseRegExp, substituteWithCorrectCase(function(_, helpingVerb, adverb) {
           return helpingVerb.toLowerCase() + ' ' +
                  (adverb || '').toLowerCase() + ' ' +
                  pastParticipleSubstitution;
@@ -80,7 +88,7 @@
     }
 
     function capitalizeWord(word) {
-      // string can begin with hyphen in the case of "-disrupting"
+      // string can begin with hyphen, e.g. "-disrupting"
       var firstLetterIdx = (word[0] === '-') ? 1 : 0;
       var firstLetterCode = word.charCodeAt(firstLetterIdx);
       var capitalizedFirstLetter = String.fromCharCode(firstLetterCode - 32);
