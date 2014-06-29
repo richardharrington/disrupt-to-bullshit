@@ -3,8 +3,9 @@
   var DISRUPTION_SUBSTITUTIONS = (function() {
 
     var specialSubstitutions = [
-      [ /Disrupt\s+(NY|SF|New\s+York|San\s+Francisco|Europe|Beijing)/g, 'Bullshitpalooza $1' ],
-      [ /TechCrunch\s+Disrupt/g, 'Bullshitpalooza' ]
+      [ /Disrupt\s+(NY|SF|New\s+York|San\s+Francisco|Europe|Beijing|Hardware|Battlefield)/g,
+              'Bullshitpalooza $1' ],
+      [ /TechCrunch\s+Disrupt/g, 'TechCrunch Bullshitpalooza' ]
     ];
 
     var exactPhraseMap = {
