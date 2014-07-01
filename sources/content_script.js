@@ -1,3 +1,8 @@
+// Copyright (c) 2014 Richard Harrington.
+// Use of this source code is governed by the MIT license,
+// found in the LICENSE file.
+// (inspired by the various people who made cloud-to-butt.)
+
 (function() {
 
   var DISRUPT_TO_BULLSHIT_RULES = {
