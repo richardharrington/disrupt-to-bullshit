@@ -14,6 +14,8 @@ Note: this extension is not a comment on any particular company or management th
 
 ### Installation
 
-Right now you have to download the 'source' folder onto your computer, go to chrome://extensions, click on Developer Mode, and click on Load Unpacked Extensions, then navigate to the folder where you put the source files.
-
-Soon I'll have a packaged plugin, and soon after that I'll have ones for Firefox and Safari.
+[Chrome extension](https://chrome.google.com/webstore/detail/disrupt-to-bullshit/mahaemfhlcjficbbkbpmkbhhenfnikcf)
+Firefox add-on (coming soon)
+Safari extension (coming soon)
+Opera add-on (the Chrome extension should be compatible)
+Internet Explorer (I'm looking into it)
