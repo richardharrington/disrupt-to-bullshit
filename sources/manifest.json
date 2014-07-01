@@ -8,7 +8,12 @@
         {
             "matches": ["*://*/*"],
             "match_about_blank": true,
-            "js": ["content_script.js"],
+            "js": [
+                "disrupt_to_bullshit.js",
+                "walk_text_nodes.js",
+                "create_verb_converter.js",
+                "main.js"
+            ],
             "all_frames": true
         }
     ]
