@@ -42,9 +42,7 @@
 
   // ---------------------------------------------
 
-  var start = Date.now();
   makeItSo();
-  console.log("Time elapsed: ", Date.now() - start);
 
   function makeItSo() {
     var disruptToBullshit = createVerbConverter(DISRUPT_TO_BULLSHIT_RULES);
