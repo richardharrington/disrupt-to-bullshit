@@ -13,7 +13,11 @@ Note: this extension is not a comment on any particular company or management th
 ### Installation
 
 [Chrome extension](https://chrome.google.com/webstore/detail/disrupt-to-bullshit/mahaemfhlcjficbbkbpmkbhhenfnikcf)
+
 Firefox add-on (coming soon)
+
 Safari extension (coming soon)
+
 Opera add-on (the Chrome extension should be compatible)
+
 Internet Explorer (I'm looking into it)
