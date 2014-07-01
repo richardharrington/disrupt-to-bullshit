@@ -19,7 +19,7 @@
     ],
 
     rootVerb: 'disrupt',
-    helpingVerbs: ['being', 'been', 'be', 'is', 'are', 'was', 'were', 'gets', 'get'],
+    helpingVerbs: ['being', 'been', 'be', 'is', 'are', 'was', 'were', 'gets', 'get', 'got', 'gotten'],
     pastParticipleMapToLowerCase: { 'disrupted': 'covered in bullshit' },
 
     exactPhraseMapToLowerCase: {
