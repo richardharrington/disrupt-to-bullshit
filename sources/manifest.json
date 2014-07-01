@@ -3,6 +3,13 @@
     "name": "Disrupt to Bullshit",
     "version": "1.0",
     "description": "Replaces various versions of 'disrupt' with 'bullshit'.",
+    "icons":
+    {
+        "16": "icon16.png",
+        "32": "icon32.png",
+        "48": "icon48.png",
+        "128": "icon128.png"
+    },
     "content_scripts":
     [
         {
