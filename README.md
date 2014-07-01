@@ -1,7 +1,7 @@
 disrupt-to-bullshit
 ===================
 
-A browser extension which converts various forms of the word "disrupt web page to various forms of the word "bullshit".
+A browser extension which converts various forms of the word "disrupt" to various forms of the word "bullshit" in all web pages.
 
 Inspired by the [Cloud To Butt](https://github.com/panicsteve/cloud-to-butt) plugin, as well as [Cloud To Butt Plus](https://github.com/hank/cloud-to-butt).
 
