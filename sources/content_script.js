@@ -23,14 +23,14 @@
     pastParticipleMapToLowerCase: { 'disrupted': 'covered in bullshit' },
 
     exactPhraseMapToLowerCase: {
+      'disruption of': 'bullshitting of',
       'so disruptive': 'such bullshit',
-      'so disruptively': 'by means of such bullshit',
       '-disrupting': '-bullshitting'
     },
 
     suffixMapToLowerCase: {
       ed: 'rained bullshit on',
-      ively: 'by means of bullshit',
+      ively: 'bullshittingly',
       ive: 'bullshit',
       ions: 'piles of bullshit',
       ion: 'bullshit',
