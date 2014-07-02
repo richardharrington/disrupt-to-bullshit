@@ -28,8 +28,8 @@
     customRegExpPairs: [
 
       // end of text node
-      [ /\b(disrupt(?:s|ts|ing|ed)?)(\s*)?$/gi, function(_, disrupt, space) {
-        return disruptToBullshipMapTemp[disrupt] + (space || '');
+      [ /\b(disrupt(?:s|ts|ing|ed)?)([\x27\u2019]?[\x22\u201D]?\s*)?$/gi, function(_, disrupt, closingQuotesAndSpace) {
+        return disruptToBullshipMapTemp[disrupt] + (closingQuotesAndSpace || '');
       }],
 
       // apostrophe (single quote at end, not a single quote at beginning)
@@ -48,8 +48,8 @@
       }],
 
       // conjunctions and prepositions and helping verbs
-      [ /\b(disrupt(?:s|ts|ing|ed)?)(\s+)(after|although|and|as|because|before|both|but|either|even|if|though|for|how|however|if|in|neither|nor|now|once|only|or|provided|rather|than|since|so|than|that|though|till|unless|until|when|whenever|where|whereas|wherever|whether|while|yet|aboard|about|above|according|across|after|against|ahead|along|amid|among|apart|around|back|because|before|behind|below|beneath|beside|between|beyond|but|by|concerning|contrary|despite|down|during|except|excepting|for|from|in|inside|instead|into|like|near|of|off|on|out|outside|over|past|rather|regarding|round|since|through|throughout|till|to|together|toward|towards|under|underneath|until|unto|up|upon|versus|via|with|within|without|worth|be|am|is|are|was|were|been|being|have|has|had|could|should|would|may|might|must|shall|can|will|do|did|does|having)\b/gi, function(_, disrupt, space, nextWord) {
-        return disruptToBullshipMapTemp[disrupt] + space + nextWord;
+      [ /\b(disrupt(?:s|ts|ing|ed)?)([\x27\u2019]?[\x22\u201D]?\s+)(after|although|and|as|because|before|both|but|either|even|if|though|for|how|however|if|in|neither|nor|now|once|only|or|provided|rather|than|since|so|than|that|though|till|unless|until|when|whenever|where|whereas|wherever|whether|while|yet|aboard|about|above|according|across|after|against|ahead|along|amid|among|apart|around|back|because|before|behind|below|beneath|beside|between|beyond|but|by|concerning|contrary|despite|down|during|except|excepting|for|from|in|inside|instead|into|like|near|of|off|on|out|outside|over|past|rather|regarding|round|since|through|throughout|till|to|together|toward|towards|under|underneath|until|unto|up|upon|versus|via|with|within|without|worth|be|am|is|are|was|were|been|being|have|has|had|could|should|would|may|might|must|shall|can|will|do|did|does|having|get|gets|got)\b/gi, function(_, disrupt, closingQuotesAndSpace, nextWord) {
+        return disruptToBullshipMapTemp[disrupt] + closingQuotesAndSpace + nextWord;
       }],
 
 
