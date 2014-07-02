@@ -5,11 +5,59 @@
 
 (function() {
 
+  // -------------- BEGINNING OF SPAGHETTI CODE --------------------
+
+  // TODO: This whole first section needs to rewritten soon. It's spaghetti code.
+  // Swap out some of these brute force rules for indentifying intransitive verbs
+  // for more elegant integration with the verb API. Right now we just have to get this out
+  // to fix the transitive/intransitive discrepancies in production.
+
+  var disruptToBullshipMapTemp = {
+    disrupt: 'bullshit',
+    disrupts: 'bullshits',
+    disrupting: 'bullshitting',
+    disrupted: 'bullshitted',
+    Disrupt: 'Bullshit',
+    Disrupts: 'Bullshits',
+    Disrupting: 'Bullshitting',
+    Disrupted: 'Bullshitted'
+  };
+
   var DISRUPT_TO_BULLSHIT_RULES = {
 
-    // These custom regexp pairs are to make sure we catch as many instances
-    // of the conference name as possible.
     customRegExpPairs: [
+
+      // end of text node
+      [ /\b(disrupt(?:s|ts|ing|ed)?)(\s*)?$/gi, function(_, disrupt, space) {
+        return disruptToBullshipMapTemp[disrupt] + (space || '');
+      }],
+
+      // apostrophe (single quote at end, not a single quote at beginning)
+      [ /([^\u2018\x27])(disrupt(?:s|ts|ing|ed)?)([\u2019\x27])/gi, function(_, precedingChar, disrupt, apostrophe) {
+        return precedingChar + disruptToBullshipMapTemp[disrupt] + apostrophe;
+      }],
+
+      // apostrophe (single quote at end, nothing at beginning)
+      [ /^(disrupt(?:s|ts|ing|ed)?)([\u2019\x27])/gi, function(_, disrupt, apostrophe) {
+        return disruptToBullshipMapTemp[disrupt] + apostrophe;
+      }],
+
+      // dash, en-dash, comma, colon, semicolon, period
+      [ /\b(disrupt(?:s|ts|ing|ed)?)(\s*[-\u2013\u2014,:;.])/gi, function(_, disrupt, spaceAndPunctuation) {
+        return disruptToBullshipMapTemp[disrupt] + spaceAndPunctuation;
+      }],
+
+      // conjunctions and prepositions and helping verbs
+      [ /\b(disrupt(?:s|ts|ing|ed)?)(\s+)(after|although|and|as|because|before|both|but|either|even|if|though|for|how|however|if|in|neither|nor|now|once|only|or|provided|rather|than|since|so|than|that|though|till|unless|until|when|whenever|where|whereas|wherever|whether|while|yet|aboard|about|above|according|across|after|against|ahead|along|amid|among|apart|around|back|because|before|behind|below|beneath|beside|between|beyond|but|by|concerning|contrary|despite|down|during|except|excepting|for|from|in|inside|instead|into|like|near|of|off|on|out|outside|over|past|rather|regarding|round|since|through|throughout|till|to|together|toward|towards|under|underneath|until|unto|up|upon|versus|via|with|within|without|worth|be|am|is|are|was|were|been|being|have|has|had|could|should|would|may|might|must|shall|can|will|do|did|does|having)\b/gi, function(_, disrupt, space, nextWord) {
+        return disruptToBullshipMapTemp[disrupt] + space + nextWord;
+      }],
+
+
+      // ----------------- END OF SPAGHETTI CODE -----------------------
+
+      // These next custom regexp pairs are to make sure we catch as many instances
+      // of the conference name as possible.
+
       // Followed by place names, "Hardware", or "Battlefield"
       [ /Disrupt\s+(NY|SF|New\s+York|San\s+Francisco|Europe|Beijing|Hardware|Battlefield)/g,
               'Bullshitpalooza $1' ],
