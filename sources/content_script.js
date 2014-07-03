@@ -5,27 +5,26 @@
 
 (function() {
 
-  // -------------- BEGINNING OF SPAGHETTI CODE --------------------
+  // -------------- BEGINNING OF HACKY EXTRA RULES --------------------
 
   // TODO: This whole first section needs to rewritten soon. It's spaghetti code.
   // Swap out some of these brute force rules for indentifying intransitive verbs
   // for more elegant integration with the verb API. Right now we just have to get this out
   // to fix the transitive/intransitive discrepancies in production.
 
-  var disruptToBullshipMapTemp = {
-    disrupt: 'bullshit',
-    disrupts: 'bullshits',
-    disrupting: 'bullshitting',
-    disrupted: 'bullshitted',
-    Disrupt: 'Bullshit',
-    Disrupts: 'Bullshits',
-    Disrupting: 'Bullshitting',
-    Disrupted: 'Bullshitted'
-  };
+  var hackyExtraRules = (function() {
+    var disruptToBullshipMapTemp = {
+      disrupt: 'bullshit',
+      disrupts: 'bullshits',
+      disrupting: 'bullshitting',
+      disrupted: 'bullshitted',
+      Disrupt: 'Bullshit',
+      Disrupts: 'Bullshits',
+      Disrupting: 'Bullshitting',
+      Disrupted: 'Bullshitted'
+    };
 
-  var DISRUPT_TO_BULLSHIT_RULES = {
-
-    customRegExpPairs: [
+    return [
 
       // end of text node
       [ /\b(disrupt(?:s|ts|ing|ed)?)([\x27\u2019]?[\x22\u201D]?\s*)?$/gi, function(_, disrupt, closingQuotesAndSpace) {
@@ -50,10 +49,15 @@
       // conjunctions and prepositions and helping verbs
       [ /\b(disrupt(?:s|ts|ing|ed)?)([\x27\u2019]?[\x22\u201D]?\s+)(after|although|and|as|because|before|both|but|either|even|if|though|for|how|however|if|in|neither|nor|now|once|only|or|provided|rather|than|since|so|than|that|though|till|unless|until|when|whenever|where|whereas|wherever|whether|while|yet|aboard|about|above|according|across|after|against|ahead|along|amid|among|apart|around|back|because|before|behind|below|beneath|beside|between|beyond|but|by|concerning|contrary|despite|down|during|except|excepting|for|from|in|inside|instead|into|like|near|of|off|on|out|outside|over|past|rather|regarding|round|since|through|throughout|till|to|together|toward|towards|under|underneath|until|unto|up|upon|versus|via|with|within|without|worth|be|am|is|are|was|were|been|being|have|has|had|could|should|would|may|might|must|shall|can|will|do|did|does|having|get|gets|got)\b/gi, function(_, disrupt, closingQuotesAndSpace, nextWord) {
         return disruptToBullshipMapTemp[disrupt] + closingQuotesAndSpace + nextWord;
-      }],
+      }]
+    ];
+  })();
 
+  // -------------- END OF HACKY EXTRA RULES --------------------
 
-      // ----------------- END OF SPAGHETTI CODE -----------------------
+  var DISRUPT_TO_BULLSHIT_RULES = {
+
+    customRegExpPairs: [
 
       // These next custom regexp pairs are to make sure we catch as many instances
       // of the conference name as possible.
@@ -64,7 +68,8 @@
       // Preceded by "TechCrunch", or any preposition
       [ /\b(TechCrunch|[Aa]bout|[Oo]f|[Aa]fter|[Aa]round|[Aa]t|[Bb]efore|[Dd]uring|[Ff]ollowing|[Ff]or|[Ii]n|[Ii]nside|[Ll]ike|[Oo]n|[Oo]utside|[Rr]egarding|[Ss]ince|[Tt]oward|[Tt]owards|[Uu]nlike|[Uu]ntil|[Vv]ia|[Ww]ith|[Ww]ithin|[Ww]ithout)\s+Disrupt\b/g,
               '$1 Bullshitpalooza' ]
-    ],
+
+    ].concat(hackyExtraRules),
 
     rootVerb: 'disrupt',
     helpingVerbs: ['being', 'been', 'be', 'is', 'are', 'was', 'were', 'gets', 'get', 'got', 'gotten'],

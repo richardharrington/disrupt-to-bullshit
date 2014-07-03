@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Disrupt to Bullshit",
     "short_name": "D2B",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Replaces the word 'disrupt' with the word 'bullshit,' in every web page.",
     "icons":
     {
