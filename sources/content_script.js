@@ -32,7 +32,7 @@
         return disruptToBullshipMapTemp[disrupt] + (closingQuotesAndSpace || '');
       }],
 
-      // apostrophe (single quote at end, not a single quote at beginning)
+      // apostrophe (single quote at end, something besides a single quote at beginning)
       [ /([^\u2018\x27])(disrupt(?:s|ts|ing|ed)?)([\u2019\x27])/gi, function(_, precedingChar, disrupt, apostrophe) {
         return precedingChar + disruptToBullshipMapTemp[disrupt] + apostrophe;
       }],
@@ -42,8 +42,8 @@
         return disruptToBullshipMapTemp[disrupt] + apostrophe;
       }],
 
-      // dash, en-dash, comma, colon, semicolon, period
-      [ /\b(disrupt(?:s|ts|ing|ed)?)(\s*[-\u2013\u2014,:;.])/gi, function(_, disrupt, spaceAndPunctuation) {
+      // dash, en-dash, em-dash, comma, colon, semicolon, period (preceded by optional single and/or double quote)
+      [ /\b(disrupt(?:s|ts|ing|ed)?)(\s*[\x27\u2019]?[\x22\u201D]?[-\u2013\u2014,:;.])/gi, function(_, disrupt, spaceAndPunctuation) {
         return disruptToBullshipMapTemp[disrupt] + spaceAndPunctuation;
       }],
 
