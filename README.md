@@ -12,11 +12,11 @@ Note: Disrupt to Bullshit is not a commentary on any particular company or any p
 
 ### Installation
 
-[Chrome extension](https://chrome.google.com/webstore/detail/disrupt-to-bullshit/mahaemfhlcjficbbkbpmkbhhenfnikcf)  
-Firefox add-on (coming soon)  
-Safari extension (coming soon)  
-Opera add-on (the Chrome extension should be compatible)  
-Internet Explorer (I'm looking into it)
+**[Chrome extension](https://chrome.google.com/webstore/detail/disrupt-to-bullshit/mahaemfhlcjficbbkbpmkbhhenfnikcf)** (fastest)  
+**[Firefox add-on](https://addons.mozilla.org/en-US/firefox/addon/disrupt-to-bullshit/)**  
+**Safari extension** (anybody want to make this one?)  
+**Opera add-on** (they say the Chrome extension is compatible with Opera)  
+**Internet Explorer add-on** (I'm looking into it. It looks pretty hairy, though. It's probably not going to happen)
 
 Alternatively, to play around with the code yourself in Chrome:
 
