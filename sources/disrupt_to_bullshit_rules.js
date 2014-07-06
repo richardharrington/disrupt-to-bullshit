@@ -63,8 +63,10 @@ window.DISRUPT_TO_BULLSHIT_RULES = (function() {
       [ /Disrupt\s+(NY|SF|New\s+York|San\s+Francisco|Europe|Beijing|Hardware|Battlefield)/g,
               'Bullshitpalooza $1' ],
       // Preceded by "TechCrunch", or any preposition
-      [ /\b(TechCrunch|[Aa]bout|[Oo]f|[Aa]fter|[Aa]round|[Aa]t|[Bb]efore|[Dd]uring|[Ff]ollowing|[Ff]or|[Ii]n|[Ii]nside|[Ll]ike|[Oo]n|[Oo]utside|[Rr]egarding|[Ss]ince|[Tt]oward|[Tt]owards|[Uu]nlike|[Uu]ntil|[Vv]ia|[Ww]ith|[Ww]ithin|[Ww]ithout)\s+Disrupt\b/g,
-              '$1 Bullshitpalooza' ]
+      [ /\b(TechCrunch|about|of|after|around|at|before|during|following|for|in|inside|like|on|outside|regarding|since|toward|towards|unlike|until|via|with|within|without)\s+Disrupt\b/g,
+        function(_, precedingWord) {
+          return precedingWord + ' Bullshitpalooza';
+        }]
 
     ],
 
