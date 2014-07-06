@@ -1,6 +1,8 @@
 window.createVerbConverter = function(rules) {
   var customRegExpPairs = rules.customRegExpPairs;
+  var hackyRulesAboutNonTransitives = rules.hackyRulesAboutNonTransitives;
   var rootVerb = rules.rootVerb;
+  var rootConversion = rules.rootConversion;
   var helpingVerbs = rules.helpingVerbs;
 
   var pastParticipleMap = createLowerAndUpperMap(rules.pastParticipleMapToLowerCase);
@@ -13,7 +15,7 @@ window.createVerbConverter = function(rules) {
 
   // e.g. "<helping verb> <optional adverb> disrupted"
   var pastParticiplePhraseRegExp =
-          new RegExp("\\b(" + altMatches(helpingVerbs) + ")\\s+(\\w+\\s+)?" + pastParticiple + "\\b", "gi");
+          new RegExp("\\b(" + altMatches(helpingVerbs) + ")\\s+(?:(\\w+)\\s+)?" + pastParticiple + "\\b", "gi");
 
   var exactPhraseRegExp =
           new RegExp("\\b" + altMatches(exactPhraseKeys) + "\\b", "gi");
@@ -21,22 +23,34 @@ window.createVerbConverter = function(rules) {
   var verbWithSuffixRegExp =
           new RegExp("\\b" + rootVerb + "(" + altMatches(suffixKeys) + ")?\\b", "gi");
 
-  var conversions = customRegExpPairs.concat([
+  // in case there's something we missed in the middle of a word, 
+  // just convert it to the root verb.
+  var fallbackRegExp = new RegExp(rootVerb, "gi");
 
-    [ pastParticiplePhraseRegExp, function(wholeMatch, helpingVerb, adverb) {
-        var pastParticipleReplacement = withCorrectCase(pastParticipleMap, pastParticiple, wholeMatch);
-        return helpingVerb + ' ' + (adverb || '') + ' ' + pastParticipleReplacement;
-    }],
+  var conversions = [].concat(
+    customRegExpPairs,
+    [
+      [ pastParticiplePhraseRegExp, function(wholeMatch, helpingVerb, adverb) {
+          var pastParticipleReplacement = withCorrectCase(pastParticipleMap, pastParticiple, wholeMatch);
+          var maybeAdverbAndSpace = adverb ? adverb + ' ' : '';
+          return helpingVerb + ' ' + maybeAdverbAndSpace + pastParticipleReplacement;
+      }],
 
-    [ exactPhraseRegExp, function(wholeMatch) {
-        return withCorrectCase(exactPhraseMap, wholeMatch.toLowerCase(), wholeMatch);
-    }],
+      [ exactPhraseRegExp, function(wholeMatch) {
+          return withCorrectCase(exactPhraseMap, wholeMatch.toLowerCase(), wholeMatch);
+      }]
+    ], 
+    hackyRulesAboutNonTransitives,
+    [
+      [ verbWithSuffixRegExp, function(wholeMatch, suffix) {
+          return withCorrectCase(suffixMap, (suffix || ''), wholeMatch);
+      }],
 
-    [ verbWithSuffixRegExp, function(wholeMatch, suffix) {
-        return withCorrectCase(suffixMap, (suffix || ''), wholeMatch);
-    }]
-
-  ]);
+      [ fallbackRegExp, function(wholeMatch) {
+          return isVerbLowerCase(wholeMatch) ? rootConversion : capitalizePhrase(rootConversion);
+      }]
+    ]
+  );
 
   return convert;
 
