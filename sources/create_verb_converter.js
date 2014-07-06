@@ -13,12 +13,12 @@ window.createVerbConverter = function(rules) {
   var exactPhraseKeys = Object.keys(rules.exactPhraseMapToLowerCase);
   var suffixKeys = Object.keys(rules.suffixMapToLowerCase);
 
+  var exactPhraseRegExp =
+          new RegExp("\\b" + altMatches(exactPhraseKeys) + "\\b", "gi");
+
   // e.g. "<helping verb> <optional adverb> disrupted"
   var pastParticiplePhraseRegExp =
           new RegExp("\\b(" + altMatches(helpingVerbs) + ")\\s+(?:(\\w+)\\s+)?" + pastParticiple + "\\b", "gi");
-
-  var exactPhraseRegExp =
-          new RegExp("\\b" + altMatches(exactPhraseKeys) + "\\b", "gi");
 
   var verbWithSuffixRegExp =
           new RegExp("\\b" + rootVerb + "(" + altMatches(suffixKeys) + ")?\\b", "gi");
