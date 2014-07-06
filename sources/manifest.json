@@ -3,7 +3,7 @@
     "name": "Disrupt to Bullshit",
     "short_name": "D2B",
     "version": "1.0.5",
-    "description": "Replaces the word 'disrupt' with the word 'bullshit,' in every web page.",
+    "description": "Replaces various forms of the word 'disrupt' with various forms of the word 'bullshit,' in every web page.",
     "icons":
     {
         "16": "icon16.png",
