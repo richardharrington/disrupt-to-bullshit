@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Disrupt to Bullshit",
     "short_name": "D2B",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "Replaces various forms of the word 'disrupt' with various forms of the word 'bullshit,' in every web page.",
     "icons":
     {
@@ -16,7 +16,13 @@
         {
             "matches": ["*://*/*"],
             "match_about_blank": true,
-            "js": ["content_script.js"],
+            "js":
+            [
+                "disrupt_to_bullshit_rules.js",
+                "walk_text_nodes.js",
+                "create_verb_converter.js",
+                "content_script.js"
+            ],
             "all_frames": true
         }
     ]
