@@ -1,4 +1,4 @@
-disrupt-to-bullshit
+Disrupt to Bullshit
 ===================
 
 A browser extension which converts various forms of the word "disrupt" to various forms of the word "bullshit," in all web pages.
@@ -10,7 +10,7 @@ Note: Disrupt to Bullshit is not a commentary on any particular company or any p
 
 ### Installation
 
-**[Chrome extension](https://chrome.google.com/webstore/detail/disrupt-to-bullshit/mahaemfhlcjficbbkbpmkbhhenfnikcf)** (fastest)   
+**[Chrome extension](https://chrome.google.com/webstore/detail/disrupt-to-bullshit/mahaemfhlcjficbbkbpmkbhhenfnikcf)**   
 **[Firefox add-on](https://addons.mozilla.org/en-US/firefox/addon/disrupt-to-bullshit/)**  
 **Safari extension** (anybody want to make this one?)  
 **Opera add-on** (they say the Chrome extension is compatible with Opera)  
@@ -23,3 +23,9 @@ Alternatively, to play around with the code yourself in Chrome:
 3. Click on "Developer mode"
 4. Click on "Load unpacked extension..."
 5. Navigate to your local copy of this repo, and select the 'sources' folder
+
+### A note on the code
+
+The code in the sources directory can be used to make a Chrome extension. Firefox add-ons are not significantly different, but currently I create new versions of the Firefox add-on by shifting a few things around manually. In the future, there will be a build step to create both versions.
+
+
