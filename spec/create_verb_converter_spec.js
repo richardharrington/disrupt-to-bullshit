@@ -52,7 +52,10 @@ describe("createVerbConverter", function() {
     assert('disrupt => rain bullshit on when surrounded by double curly quotes',
            '“disrupt” this', '“rain bullshit on” this');
 
-    assert('disrupt => rain bullshit on when surrounded by single and double quotes',
+    assert('disrupt => rain bullshit on when surrounded by single and double straight quotes',
+           '"\'disrupt\'" this', '"\'rain bullshit on\'" this');
+
+    assert('disrupt => rain bullshit on when surrounded by single and double curly quotes',
            '“‘disrupt’” this', '“‘rain bullshit on’” this');
 
   });
@@ -115,19 +118,19 @@ describe("createVerbConverter", function() {
 
   describe("past participle in passive construction", function() {
 
-    assert('<LC helping verb> disrupted => <LC helping verb>covered in bullshit',
+    assert('<helping verb> disrupted => <helping verb>covered in bullshit',
            'got disrupted', 'got covered in bullshit');
 
-    assert('<LC helping verb> <LC adverb> totally disrupted => <LC helping verb> <LC adverb> totally covered in bullshit',
+    assert('<helping verb> <adverb> disrupted => <helping verb> <adverb> covered in bullshit',
            'got totally disrupted', 'got totally covered in bullshit');
 
-    assert('<UC helping verb> Disrupted => <UC helping verb> Covered in Bullshit',
+    assert('<Helping Verb> Disrupted => <Helping Verb> Covered in Bullshit',
            'Got Disrupted', 'Got Covered in Bullshit');
 
-    assert('<LC helping verb> Disrupted => <LC helping verb> Covered in Bullshit',
+    assert('<helping verb> Disrupted => <helping verb> Covered in Bullshit',
            'got Disrupted', 'got Covered in Bullshit');
 
-    assert('<LC helping verb> <UC adverb> Disrupted => <LC helping verb> <UC adverb> Covered in Bullshit',
+    assert('<helping verb> <Adverb> Disrupted => <helping verb> <Adverb> Covered in Bullshit',
            'got Totally Disrupted', 'got Totally Covered in Bullshit');
 
     assert('tightens up extra spaces',
@@ -173,7 +176,10 @@ describe("createVerbConverter", function() {
     assert('disrupt => bullshit when at end of string surrounded by double curly quotes',
            '“disrupt”', '“bullshit”');
 
-    assert('disrupt => bullshit when at end of string surrounded by single and double quotes',
+    assert('disrupt => bullshit when at end of string surrounded by single and double straight quotes',
+           '"\'disrupt\'"', '"\'bullshit\'"');
+
+    assert('disrupt => bullshit when at end of string surrounded by single and double curly quotes',
            '“‘disrupt’”', '“‘bullshit’”');
 
     assert('disrupt => bullshit when followed by comma',
@@ -209,14 +215,11 @@ describe("createVerbConverter", function() {
     assert('disrupt => bullshit when followed by single straight quote and preceded by something other than single straight quote',
            'It is not disrupt\'s fault', 'It is not bullshit\'s fault');
 
-    assert('disrupt => bullshit when followed by single straight quote and preceded by something other than single straight quote',
+    assert('disrupt => bullshit when followed by single curly quote and preceded by something other than single curly quote',
            'It is not disrupt’s fault', 'It is not bullshit’s fault');
 
     assert('disrupt => bullshit when starting the string and followed by single straight quote',
            'disrupt\'', 'bullshit\'');
-
-    assert('disrupt => bullshit when starting the string and followed by single curly quote',
-           'disrupt’', 'bullshit’');
 
     assert('disrupt => bullshit when starting the string and followed by single curly quote',
            'disrupt’', 'bullshit’');
@@ -231,7 +234,7 @@ describe("createVerbConverter", function() {
 
   describe("phrases related to the conference", function() {
 
-    assert('Disrupt <place name> => Bullshitpalooza <place name>',
+    assert('Disrupt <Place Name> => Bullshitpalooza <Place Name>',
            'Disrupt NY', 'Bullshitpalooza NY');
 
     assert('Disrupt Hardware => Bullshitpalooza Hardware',
