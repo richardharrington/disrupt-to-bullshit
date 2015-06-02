@@ -1,6 +1,6 @@
 window.createVerbConverter = function(rules) {
   var customRegExpPairs = rules.customRegExpPairs;
-  var hackyRulesAboutNonTransitives = rules.hackyRulesAboutNonTransitives;
+  var specialCases = rules.specialCases;
   var rootVerb = rules.rootVerb;
   var rootConversion = rules.rootConversion;
   var helpingVerbs = rules.helpingVerbs;
@@ -23,7 +23,7 @@ window.createVerbConverter = function(rules) {
   var verbWithSuffixRegExp =
           new RegExp("\\b" + rootVerb + "(" + altMatches(suffixKeys) + ")?\\b", "gi");
 
-  // in case there's something we missed in the middle of a word, 
+  // in case there's something we missed in the middle of a word,
   // just convert it to the root verb.
   var fallbackRegExp = new RegExp(rootVerb, "gi");
 
@@ -39,8 +39,8 @@ window.createVerbConverter = function(rules) {
       [ exactPhraseRegExp, function(wholeMatch) {
           return withCorrectCase(exactPhraseMap, wholeMatch.toLowerCase(), wholeMatch);
       }]
-    ], 
-    hackyRulesAboutNonTransitives,
+    ],
+    specialCases,
     [
       [ verbWithSuffixRegExp, function(wholeMatch, suffix) {
           return withCorrectCase(suffixMap, (suffix || ''), wholeMatch);
