@@ -27,32 +27,37 @@ window.createVerbConverter = function(rules) {
   // just convert it to the root verb.
   var fallbackRegExp = new RegExp(rootVerb, "gi");
 
+  var pastParticipleReplacement = [
+    pastParticiplePhraseRegExp, function(wholeMatch, helpingVerb, adverb) {
+      var pastParticipleReplacement = withCorrectCase(pastParticipleMap, pastParticiple, wholeMatch);
+      var maybeAdverbAndSpace = adverb ? adverb + ' ' : '';
+      return helpingVerb + ' ' + maybeAdverbAndSpace + pastParticipleReplacement;
+    }
+  ];
+
+  var customWithSmartCasingReplacement = [
+    exactPhraseRegExp, function(wholeMatch) {
+      return withCorrectCase(exactPhraseMap, wholeMatch.toLowerCase(), wholeMatch);
+    }
+  ];
+
+  var verbWithSuffixReplacement = [
+    verbWithSuffixRegExp, function(wholeMatch, suffix) {
+      return withCorrectCase(suffixMap, (suffix || ''), wholeMatch);
+    }
+  ];
+
+  var fallbackReplacement = [
+    fallbackRegExp, function(wholeMatch) {
+      return isVerbLowerCase(wholeMatch) ? rootConversion : capitalizePhrase(rootConversion);
+    }
+  ];
+
   var conversions = [].concat(
-    customRegExpPairs, [
-      [
-        pastParticiplePhraseRegExp, function(wholeMatch, helpingVerb, adverb) {
-          var pastParticipleReplacement = withCorrectCase(pastParticipleMap, pastParticiple, wholeMatch);
-          var maybeAdverbAndSpace = adverb ? adverb + ' ' : '';
-          return helpingVerb + ' ' + maybeAdverbAndSpace + pastParticipleReplacement;
-        }
-      ],
-      [
-        exactPhraseRegExp, function(wholeMatch) {
-          return withCorrectCase(exactPhraseMap, wholeMatch.toLowerCase(), wholeMatch);
-        }
-      ]
-    ],
-    specialCases, [
-      [
-        verbWithSuffixRegExp, function(wholeMatch, suffix) {
-          return withCorrectCase(suffixMap, (suffix || ''), wholeMatch);
-        }
-      ], [
-        fallbackRegExp, function(wholeMatch) {
-          return isVerbLowerCase(wholeMatch) ? rootConversion : capitalizePhrase(rootConversion);
-        }
-      ]
-    ]
+    customRegExpPairs,
+    [pastParticipleReplacement, customWithSmartCasingReplacement],
+    specialCases,
+    [verbWithSuffixReplacement, fallbackReplacement]
   );
 
   return convert;
