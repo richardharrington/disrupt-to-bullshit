@@ -28,27 +28,30 @@ window.createVerbConverter = function(rules) {
   var fallbackRegExp = new RegExp(rootVerb, "gi");
 
   var conversions = [].concat(
-    customRegExpPairs,
-    [
-      [ pastParticiplePhraseRegExp, function(wholeMatch, helpingVerb, adverb) {
+    customRegExpPairs, [
+      [
+        pastParticiplePhraseRegExp, function(wholeMatch, helpingVerb, adverb) {
           var pastParticipleReplacement = withCorrectCase(pastParticipleMap, pastParticiple, wholeMatch);
           var maybeAdverbAndSpace = adverb ? adverb + ' ' : '';
           return helpingVerb + ' ' + maybeAdverbAndSpace + pastParticipleReplacement;
-      }],
-
-      [ exactPhraseRegExp, function(wholeMatch) {
+        }
+      ],
+      [
+        exactPhraseRegExp, function(wholeMatch) {
           return withCorrectCase(exactPhraseMap, wholeMatch.toLowerCase(), wholeMatch);
-      }]
+        }
+      ]
     ],
-    specialCases,
-    [
-      [ verbWithSuffixRegExp, function(wholeMatch, suffix) {
+    specialCases, [
+      [
+        verbWithSuffixRegExp, function(wholeMatch, suffix) {
           return withCorrectCase(suffixMap, (suffix || ''), wholeMatch);
-      }],
-
-      [ fallbackRegExp, function(wholeMatch) {
+        }
+      ], [
+        fallbackRegExp, function(wholeMatch) {
           return isVerbLowerCase(wholeMatch) ? rootConversion : capitalizePhrase(rootConversion);
-      }]
+        }
+      ]
     ]
   );
 
