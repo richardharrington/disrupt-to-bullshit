@@ -1,10 +1,26 @@
 window.DISRUPT_TO_BULLSHIT_RULES = (function() {
 
-  // These special cases are good-enough brute force rules for identifying
-  // intransitive verbs, with as few false negatives and false positives
-  // as possible.
+  var customTechCrunchDisruptReplacements = [
 
-  var specialCases = (function() {
+    // These custom regexp pairs are to make sure we catch as many instances
+    // of the conference name as possible.
+
+    // Followed by place names, "Hardware", or "Battlefield"
+    [ /Disrupt\s+(NY|SF|New\s+York|San\s+Francisco|Europe|Beijing|Hardware|Battlefield)/g,
+            'Bullshitpalooza $1' ],
+    // Preceded by "TechCrunch", or any preposition
+    [ /\b(TechCrunch|about|of|after|around|at|before|during|following|for|in|inside|like|on|outside|regarding|since|toward|towards|unlike|until|via|with|within|without)\s+Disrupt\b/g,
+      function(_, precedingWord) {
+        return precedingWord + ' Bullshitpalooza';
+      }]
+
+  ];
+
+  var customIntransitiveFormReplacements = (function() {
+
+    // These special cases are good-enough brute force rules for identifying
+    // intransitive verbs, with as few false negatives and false positives
+    // as possible.
 
     var mapToBullshit = {
       disrupt: 'bullshit',
@@ -47,33 +63,20 @@ window.DISRUPT_TO_BULLSHIT_RULES = (function() {
   })();
 
   return {
-    specialCases: specialCases,
-    customRegExpPairs: [
 
-      // These next custom regexp pairs are to make sure we catch as many instances
-      // of the conference name as possible.
+    prePassCustomReplacements: customTechCrunchDisruptReplacements,
+    midPassCustomReplacements: customIntransitiveFormReplacements,
 
-      // Followed by place names, "Hardware", or "Battlefield"
-      [ /Disrupt\s+(NY|SF|New\s+York|San\s+Francisco|Europe|Beijing|Hardware|Battlefield)/g,
-              'Bullshitpalooza $1' ],
-      // Preceded by "TechCrunch", or any preposition
-      [ /\b(TechCrunch|about|of|after|around|at|before|during|following|for|in|inside|like|on|outside|regarding|since|toward|towards|unlike|until|via|with|within|without)\s+Disrupt\b/g,
-        function(_, precedingWord) {
-          return precedingWord + ' Bullshitpalooza';
-        }]
-
-    ],
+    customMapToLowerCase: {
+      'disruption of': 'bullshitting of',
+      'so disruptive': 'such bullshit',
+      '-disrupting': '-bullshitting'
+    },
 
     rootVerb: 'disrupt',
     rootConversion: 'bullshit',
     helpingVerbs: ['being', 'been', 'be', 'is', 'are', 'was', 'were', 'gets', 'get', 'got', 'gotten'],
     pastParticipleMapToLowerCase: { 'disrupted': 'covered in bullshit' },
-
-    exactPhraseMapToLowerCase: {
-      'disruption of': 'bullshitting of',
-      'so disruptive': 'such bullshit',
-      '-disrupting': '-bullshitting'
-    },
 
     suffixMapToLowerCase: {
       ed: 'rained bullshit on',
@@ -89,6 +92,7 @@ window.DISRUPT_TO_BULLSHIT_RULES = (function() {
       s: 'rains bullshit on',
       '': 'rain bullshit on'
     }
+
   };
 })();
 

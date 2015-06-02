@@ -1,20 +1,21 @@
 window.createVerbConverter = function(rules) {
   var customRegExpPairs = rules.customRegExpPairs;
-  var specialCases = rules.specialCases;
+  var prePassCustomReplacements = rules.prePassCustomReplacements;
+  var midPassCustomReplacements = rules.midPassCustomReplacements;
   var rootVerb = rules.rootVerb;
   var rootConversion = rules.rootConversion;
   var helpingVerbs = rules.helpingVerbs;
 
   var pastParticipleMap = createLowerAndUpperMap(rules.pastParticipleMapToLowerCase);
-  var exactPhraseMap = createLowerAndUpperMap(rules.exactPhraseMapToLowerCase);
+  var customWithSmartCasingMap = createLowerAndUpperMap(rules.customMapToLowerCase);
   var suffixMap = createLowerAndUpperMap(rules.suffixMapToLowerCase);
 
   var pastParticiple = Object.keys(rules.pastParticipleMapToLowerCase)[0];
-  var exactPhraseKeys = Object.keys(rules.exactPhraseMapToLowerCase);
+  var customWithSmartCasingKeys = Object.keys(rules.customMapToLowerCase);
   var suffixKeys = Object.keys(rules.suffixMapToLowerCase);
 
-  var exactPhraseRegExp =
-          new RegExp("\\b" + altMatches(exactPhraseKeys) + "\\b", "gi");
+  var customWithSmartCasingRegExp =
+          new RegExp("\\b" + altMatches(customWithSmartCasingKeys) + "\\b", "gi");
 
   // e.g. "<helping verb> <optional adverb> disrupted"
   var pastParticiplePhraseRegExp =
@@ -36,8 +37,8 @@ window.createVerbConverter = function(rules) {
   ];
 
   var customWithSmartCasingReplacement = [
-    exactPhraseRegExp, function(wholeMatch) {
-      return withCorrectCase(exactPhraseMap, wholeMatch.toLowerCase(), wholeMatch);
+    customWithSmartCasingRegExp, function(wholeMatch) {
+      return withCorrectCase(customWithSmartCasingMap, wholeMatch.toLowerCase(), wholeMatch);
     }
   ];
 
@@ -54,13 +55,11 @@ window.createVerbConverter = function(rules) {
   ];
 
   var conversions = [].concat(
-    customRegExpPairs,
+    prePassCustomReplacements,
     [pastParticipleReplacement, customWithSmartCasingReplacement],
-    specialCases,
+    midPassCustomReplacements,
     [verbWithSuffixReplacement, fallbackReplacement]
   );
-
-  return convert;
 
   function convert(originalText) {
     return conversions.reduce(function(text, conversion) {
@@ -102,4 +101,6 @@ window.createVerbConverter = function(rules) {
     var result = word.substr(0, firstLetterIdx) + capitalizedFirstLetter + word.substr(firstLetterIdx + 1);
     return result;
   }
+
+  return convert;
 };
