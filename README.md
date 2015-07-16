@@ -7,6 +7,8 @@ Inspired by the [Cloud To Butt](https://github.com/panicsteve/cloud-to-butt) plu
 
 Note: Disrupt to Bullshit is not a commentary on any particular company or any particular theory of business cycles. (For both sides of the debate over the latter, see [here](http://www.newyorker.com/reporting/2014/06/23/140623fa_fact_lepore?currentPage=all) and [here](http://www.businessweek.com/articles/2014-06-20/clayton-christensen-responds-to-new-yorker-takedown-of-disruptive-innovation).) Rather, Disrupt to Bullshit is offered for the entertainment of those who wish to install it in the privacy of their own browser, in the hope that they may be able to take full advantage of the comedic opportunities afforded to us all by the current public over-saturation of the word 'disrupt.'
 
+For more information, [see this blog post](http://www.codelearningdoing.com/disrupt-to-bullshit/).
+
 
 ### Installation
 
