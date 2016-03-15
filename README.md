@@ -12,10 +12,10 @@ For more information, [see this blog post](http://www.codelearningdoing.com/disr
 
 ### Installation
 
-**[Chrome extension](https://chrome.google.com/webstore/detail/disrupt-to-bullshit/mahaemfhlcjficbbkbpmkbhhenfnikcf)**
-**[Firefox add-on](https://addons.mozilla.org/en-US/firefox/addon/disrupt-to-bullshit/)**
-**Safari extension** (anybody want to make this one?)
-**Opera add-on** (they say the Chrome extension is compatible with Opera)
+**[Chrome extension](https://chrome.google.com/webstore/detail/disrupt-to-bullshit/mahaemfhlcjficbbkbpmkbhhenfnikcf)**  
+**[Firefox add-on](https://addons.mozilla.org/en-US/firefox/addon/disrupt-to-bullshit/)**  
+**Safari extension** (anybody want to make this one?)  
+**Opera add-on** (they say the Chrome extension is compatible with Opera)  
 **Internet Explorer add-on** (I'm looking into it. It looks pretty hairy, though. It's probably not going to happen)
 
 Alternatively, to play around with the code yourself in Chrome:
@@ -30,7 +30,8 @@ Alternatively, to play around with the code yourself in Chrome:
 
 The code in the sources directory can be used to make a Chrome extension. Firefox add-ons are not significantly different, but currently I create new versions of the Firefox add-on by shifting a few things around manually. In the future, there will be a build step to create both versions.
 
+### License
 
->Copyright (c) 2014 Richard Harrington.
->Use of this source code is governed by the Mozilla Public License 2.0.
->(and inspired by people who made Cloud to Butt.)
+>Copyright (c) 2014 Richard Harrington.  
+>Use of this source code is governed by the Mozilla Public License 2.0.  
+>(and inspired by people who made Cloud to Butt.)  
