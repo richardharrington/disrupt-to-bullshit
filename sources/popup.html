@@ -6,23 +6,31 @@
          body {
              font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
              font-size: 100%;
+             min-width: 210px;
          }
-         #status {
-             /* avoid an excessively wide status text */
-             white-space: pre;
-             text-overflow: ellipsis;
-             overflow: hidden;
-             max-width: 400px;
+         button {
+             font-size: 1.3em;
+             display: block;
+             padding: 8px;
+             border-radius: 15px;
+             background-color: #eee;
+             margin-bottom: 10px;
          }
+         /* #status {
+            white-space: pre;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-width: 400px;
+            } */
         </style>
 
     </head>
     <body>
-        <form>
-            <button id="submitButton" "type="submit"></button>
-            <input id="reloadCheckbox" name="reload" type="checkbox" checked>
-            <label for="reload">Reload page</label>
-        </form>
+
+        <button id="submitButton" "type="submit"></button>
+        <input id="reloadCheckbox" name="reload" type="checkbox" checked>
+        <label for="reload">Reload page</label>
+
         <script src="popup.js"></script>
     </body>
 </html>

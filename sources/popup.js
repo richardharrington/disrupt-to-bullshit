@@ -36,17 +36,11 @@ isEnabled(function(enabled) {
     submitButton.innerHTML = enabled ? "Disable Translation" : "Enable Translation";
 });
 
-
-
 submitButton.addEventListener("click", function() {
     toggleElementText(submitButton, "Disable Translation", "Enable Translation");
-    sendMessageToActiveTab({"debug": {"reloadCheckbox": reloadCheckbox.checked}});
-
     toggleEnabled(function() {
-        //reloadActiveTab();
-
-        // if (reloadCheckbox.checked) {
-        //     reloadActiveTab();
-        // }
+        if (reloadCheckbox.checked) {
+            reloadActiveTab();
+        }
     })
 });
