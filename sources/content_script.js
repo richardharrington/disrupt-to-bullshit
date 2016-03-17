@@ -3,22 +3,17 @@
 
 // (and inspired by people who made Cloud to Butt.)
 
-(function() {
+browserPlugin.addMessageListener(function(msg) {
+    if (msg.reload) {
+        window.location.reload();
+    }
+});
 
-    var disruptToBullshit = window.createVerbConverter(window.DISRUPT_TO_BULLSHIT_RULES);
-
-    chrome.storage.local.get("enabled", function(storedData) {
-        if (storedData.enabled) {
-            window.walkTextNodes(document.body, function(node) {
-                node.nodeValue = disruptToBullshit(node.nodeValue);
-            });
-        }
-    });
-
-    chrome.runtime.onMessage.addListener(function(request) {
-        if (request.reload) {
-            window.location.reload();
-        }
-    });
-
-})();
+browserPlugin.isEnabled(function(enabled) {
+    if (enabled) {
+        var convert = createVerbConverter(CONVERSION_RULES);
+        walkTextNodes(document.body, function(node) {
+            node.nodeValue = convert(node.nodeValue);
+        });
+    }
+});

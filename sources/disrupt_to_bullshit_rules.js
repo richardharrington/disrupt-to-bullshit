@@ -1,4 +1,4 @@
-window.DISRUPT_TO_BULLSHIT_RULES = (function() {
+window.CONVERSION_RULES = (function() {
 
   var customTechCrunchDisruptReplacements = [
 
@@ -95,4 +95,3 @@ window.DISRUPT_TO_BULLSHIT_RULES = (function() {
 
   };
 })();
-
