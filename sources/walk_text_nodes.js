@@ -12,4 +12,3 @@ window.walkTextNodes = function(root, callback) {
   while (node = treeWalker.nextNode())
     callback(node);
 };
-
