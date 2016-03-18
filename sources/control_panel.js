@@ -1,8 +1,8 @@
 (function() {
 
     var buttonText = {
-        disable: "Disable Translation (stop the bullshit!)",
-        enable: "Enable Translation (stop the disruption!)"
+        disable: "Disable Disrupt->Bullshit Translation",
+        enable: "Enable Disrupt->Bullshit Translation"
     };
 
     function toggleElementText(el, text1, text2) {
