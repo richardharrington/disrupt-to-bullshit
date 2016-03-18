@@ -8,12 +8,12 @@
     var submitButton = document.getElementById("submitButton");
     var reloadCheckbox = document.getElementById("reloadCheckbox");
 
-    browserPlugin.isEnabled(function(enabled) {
-        submitButton.innerHTML = enabled ? buttonText.disable : buttonText.enable;
+    browserPlugin.isDisabled(function(disabled) {
+        submitButton.innerHTML = disabled ? buttonText.enable : buttonText.disable;
     });
 
     submitButton.addEventListener("click", function() {
-        browserPlugin.toggleEnabled(function() {
+        browserPlugin.toggleDisabled(function() {
             if (reloadCheckbox.checked) {
                 browserPlugin.reloadActiveTab();
             }

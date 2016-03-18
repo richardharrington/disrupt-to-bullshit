@@ -9,8 +9,8 @@ browserPlugin.addMessageListener(function(msg) {
     }
 });
 
-browserPlugin.isEnabled(function(enabled) {
-    if (enabled) {
+browserPlugin.isDisabled(function(disabled) {
+    if (!disabled) {
         var convert = createVerbConverter(CONVERSION_RULES);
         walkTextNodes(document.body, function(node) {
             node.nodeValue = convert(node.nodeValue);

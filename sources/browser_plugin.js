@@ -1,13 +1,13 @@
-if (chrome) {
-    window.browserPlugin = {
-        isEnabled: function(callback) {
-            chrome.storage.local.get("enabled", function(storedData) {
-                callback(storedData.enabled);
+window.browserPlugin = (function() {
+    var chromeExtension = {
+        isDisabled: function(callback) {
+            chrome.storage.local.get("disabled", function(storedData) {
+                callback(storedData.disabled);
             });
         },
-        toggleEnabled: function(callback) {
-            this.isEnabled(function(enabled) {
-                chrome.storage.local.set({"enabled": !enabled}, callback);
+        toggleDisabled: function(callback) {
+            this.isDisabled(function(disabled) {
+                chrome.storage.local.set({"disabled": !disabled}, callback);
             });
         },
         sendMessageToActiveTab: function(msg) {
@@ -22,7 +22,7 @@ if (chrome) {
             chrome.runtime.onMessage.addListener(callback);
         }
     };
-}
-else {
-    window.browserPlugin = {}; // not implemented yet in Firefox
-}
+    var firefoxAddon = {}; // not implemented yet
+
+    return chrome ? chromeExtension : firefoxAddon;
+})();
