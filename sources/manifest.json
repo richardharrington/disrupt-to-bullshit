@@ -22,7 +22,7 @@
             "match_about_blank": true,
             "js":
             [
-                "disrupt_to_bullshit_rules.js",
+                "rules.js",
                 "walk_text_nodes.js",
                 "create_verb_converter.js",
                 "browser_plugin.js",
