@@ -1,8 +1,8 @@
 (function() {
 
     var buttonText = {
-        disable: "Disable Disrupt->Bullshit Translation",
-        enable: "Enable Disrupt->Bullshit Translation"
+        disable: "Disable Backward (from the Forward) translation",
+        enable: "Enable Backward (from the Forward) translation"
     };
 
     var submitButton = document.getElementById("submitButton");

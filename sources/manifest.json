@@ -1,9 +1,9 @@
 {
     "manifest_version": 2,
-    "name": "Disrupt to Bullshit",
-    "short_name": "D2B",
-    "version": "1.0.6",
-    "description": "Replaces various forms of the word 'disrupt' with various forms of the word 'bullshit,' in every web page.",
+    "name": "Backward From the Forward",
+    "short_name": "BFTF",
+    "version": "1.0.0",
+    "description": "Replaces various forms of BDS with Evil Wolves, and Zionist with Pixie Elves",
     "permissions": ["storage"],
     "icons":
     {
