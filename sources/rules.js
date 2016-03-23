@@ -2,11 +2,30 @@ window.CONVERSION_RULES = (function() {
 
     return {
 
-        prePassCustomReplacements: [],
+
+
+//        If BDS->Big Bad Wolf,
+//        "Boycott(s)(,) Divestment (and|&) Sanctions" -> Blow Your House Down
+
+        prePassCustomReplacements: [
+            [/Donald Trump/g, "King Ahasuerus of Persia"],
+            [/Trump/g, "Ahasuerus"],
+            [/([tT]he) Donald/gi, "$1 Ahasuerus"],
+            [/Judaism/g, "Utter and Completely Amazing Judaism"],
+            [/Jewishness/g, "Amazing Jewishness"],
+            [/Jewish\b/g, "Amazing and Jewish"],
+            [/Sheldon Adelson/g, "Sheldon ‘Hot Stuff’ Adelson"],
+            [/Jews/g, "Jews!"],
+            [/Jew\b/g, "Jew!"],
+            [/Boycotts?\W*?Divestment\W*?(and)?\W*?Sanctions/g, "Blowing Your House Down"],
+            [/boycotts?\W*?divestment\W*?(and)?\W*?sanctions/g, "blowing your house down"],
+            [/Boycotts?\W*?divestment\W*?(and)?\W*?sanctions/g, "Blowing your house down"]
+
+        ],
         midPassCustomReplacements: [],
 
         customMapToLowerCase: {
-            'bds': 'evil wolves',
+            'bds': 'big bad wolf',
 
         },
 
@@ -24,3 +43,28 @@ window.CONVERSION_RULES = (function() {
 
     };
 })();
+
+
+
+// apostrophe (single quote at end, something besides a single quote at beginning)
+[ /([^\u2018\x27])(disrupt(?:s|ts|ing|ed)?)([\u2019\x27])/gi, function(_, precedingChar, disrupt, apostrophe) {
+    return precedingChar + mapToBullshit[disrupt] + apostrophe;
+}]
+
+
+// “Jewish”
+// —> “Amazing and Jewish”
+
+// "Sheldon Adelson”
+// —> “Sheldon ‘Hot Stuff’ Adelson”
+
+
+
+// Can we change
+// “Jews” to “Jews!”
+// “Trump” to “Ahasuerus”
+// and
+// “Donald Trump” to “King Ahasuerus of Persia”
+
+// ?
+//
