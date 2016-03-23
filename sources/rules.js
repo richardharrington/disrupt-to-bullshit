@@ -7,6 +7,10 @@ window.CONVERSION_RULES = (function() {
 //        If BDS->Big Bad Wolf,
 //        "Boycott(s)(,) Divestment (and|&) Sanctions" -> Blow Your House Down
 
+        //BDS -> Big Bad Wolfing
+//        "Boycott(s)(,) Divestment (and|&) Sanctions" -> Blowing Houses Down
+
+
         prePassCustomReplacements: [
             [/Donald Trump/g, "King Ahasuerus of Persia"],
             [/Trump/g, "Ahasuerus"],
@@ -17,15 +21,15 @@ window.CONVERSION_RULES = (function() {
             [/Sheldon Adelson/g, "Sheldon ‘Hot Stuff’ Adelson"],
             [/Jews/g, "Jews!"],
             [/Jew\b/g, "Jew!"],
-            [/Boycotts?\W*?Divestment\W*?(and)?\W*?Sanctions/g, "Blowing Your House Down"],
-            [/boycotts?\W*?divestment\W*?(and)?\W*?sanctions/g, "blowing your house down"],
-            [/Boycotts?\W*?divestment\W*?(and)?\W*?sanctions/g, "Blowing your house down"]
+            [/Boycotts?\W*?Divestment\W*?(and)?\W*?Sanctions/g, "Blowing Houses Down"],
+            [/boycotts?\W*?divestment\W*?(and)?\W*?sanctions/g, "blowing houses down"],
+            [/Boycotts?\W*?divestment\W*?(and)?\W*?sanctions/g, "Blowing houses down"]
 
         ],
         midPassCustomReplacements: [],
 
         customMapToLowerCase: {
-            'bds': 'big bad wolf',
+            'bds': 'big bad wolfing',
 
         },
 
