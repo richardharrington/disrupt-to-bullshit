@@ -2,8 +2,10 @@
     "manifest_version": 2,
     "name": "Backward From the Forward",
     "short_name": "BFTF",
-    "version": "1.0.0",
-    "description": "Replaces various forms of BDS with Evil Wolves, and Zionist with Pixie Elves",
+    "version": "1.0.1",
+
+
+    "description": "This plugin transforms any website into one that is good for the Jews",
     "permissions": ["storage"],
     "icons":
     {
