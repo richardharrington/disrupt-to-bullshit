@@ -12,7 +12,9 @@ window.CONVERSION_RULES = (function() {
 
 
         prePassCustomReplacements: [
-            [/Donald Trump/g, "King Ahasuerus of Persia"],
+            [/realDonaldTrump/g, "realKingAhasuerus"],
+            [/(Donald\s*?J?\.?\s*?Trump)/g, "King Ahasuerus of Persia"],
+            [/Mr\.\s*?Trump/g, "King Ahasuerus"],
             [/Trump/g, "Ahasuerus"],
             [/([tT]he) Donald/gi, "$1 Ahasuerus"],
             [/Judaism/g, "Utter and Completely Amazing Judaism"],
